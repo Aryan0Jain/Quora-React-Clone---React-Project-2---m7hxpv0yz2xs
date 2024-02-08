@@ -5,19 +5,23 @@ import Signup from "./signup";
 export default function Policies() {
 	const [showSignUp, setShowSignUp] = useState(false);
 	return (
-		<div className={classes.container}>
-			<div className={classes.tnc}>
+		<div className="w-full flex flex-col gap-7 sm:px-6 px-4 pb-4 border-r border-[#dee0e1] dark:border-[#393839]">
+			<div className="text-[#939598] text-[12px] sm:text-[13px]">
 				By continuing you indicate that you agree to Quora’s Terms of
 				Service and Privacy Policy.
 			</div>
-			<div className={classes.options}>
-				<div className={classes.option}>
+			<div className="flex flex-col gap-2">
+				<div className="flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818]">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
 						height="24"
 						fillRule="evenodd"
 						viewBox="0 0 24 24"
+						style={{
+							height: "28px",
+							width: "28px",
+						}}
 					>
 						<path
 							d="M20.16 12.193c0-.603-.054-1.182-.155-1.739H12v3.288h4.575a3.91 3.91 0 0 1-1.696 2.565v2.133h2.747c1.607-1.48 2.535-3.659 2.535-6.248z"
@@ -36,17 +40,21 @@ export default function Policies() {
 							fill="#ea4335"
 						></path>
 					</svg>
-					<p>
+					<p className="sm:text-[13px] text-[12px]">
 						Continue with Google <span>(Coming Soon)</span>
 					</p>
 				</div>
-				<div className={classes.option}>
+				<div className="flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818]">
 					<svg
 						width="24"
 						height="24"
 						viewBox="0 0 24 24"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
+						style={{
+							height: "28px",
+							width: "28px",
+						}}
 					>
 						<path
 							fillRule="evenodd"
@@ -55,12 +63,12 @@ export default function Policies() {
 							fill="#1877F2"
 						></path>
 					</svg>
-					<p>
+					<p className="sm:text-[13px] text-[12px]">
 						Continue with Facebook <span>(Coming Soon)</span>
 					</p>
 				</div>
 				<button
-					className={classes.btn}
+					className="hover:bg-black/5 font-medium text-[13px] py-2 rounded-full dark:hover:bg-[rgba(255,255,255,0.04)]"
 					onClick={() => setShowSignUp(true)}
 				>
 					Sign Up

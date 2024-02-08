@@ -4,6 +4,12 @@ import classes from "./login-form.module.css";
 import { login } from "@/lib/actions";
 import { isValidEmail } from "@/lib/utils";
 import ErrorBox from "./error-box";
+
+const label = "text-[13px] font-bold w-fit mb-2";
+const input =
+	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[rgba(45,105,255,0.6)] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors dark:bg-[#181818] dark:border-[#393839]";
+const btn =
+	"px-5 font-medium bg-[#2e69ff] w-fit self-center text-[#fff] h-10 rounded-full hover:bg-[rgb(26,90,255)] disabled:opacity-40 disabled:bg-blue-500 disabled:text-slate-300";
 export default function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -31,14 +37,17 @@ export default function LoginForm() {
 		};
 	}, [email]);
 	return (
-		<div className={classes.container}>
-			<div className={classes.header}>
+		<div className="sm:px-6 px-4 flex flex-col gap-3 mb-4">
+			<div className="border-b border-[#dee0e1] pb-3 font-medium dark:border-[#393839]">
 				<p>Login</p>
 			</div>
-			<form className={classes.formContainer} onSubmit={handleLogin}>
-				<div className={classes.field}>
-					<label htmlFor="email">Email</label>
+			<form className="flex flex-col gap-4" onSubmit={handleLogin}>
+				<div className="flex flex-col">
+					<label htmlFor="email" className={label}>
+						Email
+					</label>
 					<input
+						className={input}
 						type="email"
 						name="email"
 						id="email"
@@ -53,9 +62,12 @@ export default function LoginForm() {
 						<ErrorBox message={"Invalid Email!"} />
 					)}
 				</div>
-				<div className={classes.field}>
-					<label htmlFor="password">Password</label>
+				<div className="flex flex-col">
+					<label htmlFor="password" className={label}>
+						Password
+					</label>
 					<input
+						className={input}
 						type="password"
 						name="password"
 						id="password"
@@ -70,7 +82,7 @@ export default function LoginForm() {
 				{loginFail && <ErrorBox message={errorMessage} />}
 				<button
 					disabled={!(password !== "" && !hasErrorEmail) || loading}
-					className={classes.btn}
+					className={btn}
 				>
 					Login
 				</button>

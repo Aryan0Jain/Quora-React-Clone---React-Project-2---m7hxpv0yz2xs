@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
+* {
+	box-sizing: border-box;
+}
 body {
 	font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI",
 		Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -10,7 +12,6 @@ body {
 	line-height: 1.4;
 	/* color: rgb(213, 214, 214);*/
 	direction: ltr;
-	box-sizing: border-box;
 	color: #282829;
 	@apply dark:text-[rgb(213,214,214)];
 }

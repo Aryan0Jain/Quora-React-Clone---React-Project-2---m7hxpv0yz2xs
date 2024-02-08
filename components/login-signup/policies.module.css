@@ -8,18 +8,16 @@
 .options {
 	@apply flex flex-col gap-2;
 }
+.option {
+	@apply flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818];
+}
 .option svg {
 	height: 28px;
 	width: 28px;
-}
-.option {
-	@apply flex gap-3 border p-2 items-center hover:bg-black/5 
-	dark:border-[#393839] dark:bg-[#181818];
 }
 .option p {
 	@apply sm:text-[14px] text-[13px];
 }
 .btn {
-	@apply hover:bg-black/5 font-medium text-[13px] py-2 rounded-full 
-	dark:hover:bg-[rgba(255,255,255,0.04)];
+	@apply hover:bg-black/5 font-medium text-[13px] py-2 rounded-full dark:hover:bg-[rgba(255,255,255,0.04)];
 }

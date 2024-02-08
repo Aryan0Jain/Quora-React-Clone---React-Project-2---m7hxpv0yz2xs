@@ -7,8 +7,9 @@ import classes from "./signup.module.css";
 import { signup } from "@/lib/actions";
 import { isValidEmail } from "@/lib/utils";
 import ErrorBox from "./error-box";
-import { useTheme } from "next-themes";
-
+// import { useTheme } from "next-themes";
+const input =
+	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[rgba(45,105,255,0.6)] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[rgb(46,105,255)] dark:focus:border-[rgb(46,105,255)] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors placeholder:text-[10px] md:placeholder:text-[12px] dark:bg-[#181818] dark:border-[#393839]";
 export default function Signup({ show, setShow }) {
 	const [ready, setReady] = useState(false);
 	const [name, setName] = useState("");
@@ -21,9 +22,7 @@ export default function Signup({ show, setShow }) {
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [signupFail, setSignupFail] = useState(false);
-	const { theme, setTheme } = useTheme(
-		localStorage.getItem("theme") || "light"
-	);
+	// const { theme, setTheme } = useTheme();
 	async function handleSignup(e) {
 		setLoading(true);
 		e.preventDefault();
@@ -66,32 +65,38 @@ export default function Signup({ show, setShow }) {
 			clearTimeout(passTimeout);
 		};
 	}, [pass, confirmPass]);
-	function handleToggle() {
-		if (theme === "dark") setTheme("light");
-		else setTheme("dark");
-	}
+	// function handleToggle() {
+	// 	if (theme === "dark") setTheme("light");
+	// 	else setTheme("dark");
+	// }
 	return (
 		ready &&
 		show &&
 		createPortal(
-			<div className={classes.background}>
-				<div className={classes.container}>
+			<div className="absolute w-full h-full flex justify-center items-center bg-black/75 top-0 left-0 px-10">
+				<div className="bg-white border border-[#dee0e1] rounded-xl	md:w-[600px] w-full flex flex-col md:text-[14px] text-[12px] dark:bg-[#181818] dark:border-[#393839]">
 					<button
 						type="button"
-						className={classes.closeBtn}
+						className="rounded-full w-fit p-2 hover:bg-slate-700/5 mt-2 ml-4"
 						onClick={() => setShow(false)}
 					>
 						<RxCross2 size={24} />
 					</button>
-					<button onClick={handleToggle}>Toggle</button>
+					{/* <button onClick={handleToggle}>Toggle</button> */}
 					<form
-						className={classes.formContainer}
+						className="px-6 pb-5 border-b dark:border-[#393839] flex flex-col gap-3"
 						onSubmit={handleSignup}
 					>
-						<div className={classes.header}>Sign Up</div>
-						<div className={classes.field}>
-							<label htmlFor="signupName">Name</label>
+						<div className="font-bold text-[18px]">Sign Up</div>
+						<div className="flex flex-col">
+							<label
+								htmlFor="signupName"
+								className="font-bold text-[13px] mb-1"
+							>
+								Name
+							</label>
 							<input
+								className={input}
 								type="text"
 								id="signupName"
 								placeholder="What would you like to be called?"
@@ -109,9 +114,15 @@ export default function Signup({ show, setShow }) {
 								/>
 							)}
 						</div>
-						<div className={classes.field}>
-							<label htmlFor="signupEmail">Email</label>
+						<div className="flex flex-col">
+							<label
+								htmlFor="signupEmail"
+								className="font-bold text-[13px] mb-1"
+							>
+								Email
+							</label>
 							<input
+								className={input}
 								type="email"
 								id="signupEmail"
 								placeholder="Your email"
@@ -128,9 +139,15 @@ export default function Signup({ show, setShow }) {
 								<ErrorBox message={errorMessage} />
 							)}
 						</div>
-						<div className={classes.field}>
-							<label htmlFor="signupPass">Password</label>
+						<div className="flex flex-col">
+							<label
+								htmlFor="signupPass"
+								className="font-bold text-[13px] mb-1"
+							>
+								Password
+							</label>
 							<input
+								className={input}
 								type="password"
 								id="signupPass"
 								placeholder="Create a password"
@@ -141,11 +158,15 @@ export default function Signup({ show, setShow }) {
 								}}
 							/>
 						</div>
-						<div className={classes.field}>
-							<label htmlFor="signupConfirmPass">
+						<div className="flex flex-col">
+							<label
+								htmlFor="signupConfirmPass"
+								className="font-bold text-[13px] mb-1"
+							>
 								Confirm Password
 							</label>
 							<input
+								className={input}
 								type="password"
 								id="signupConfirmPass"
 								placeholder="Re-enter password"
@@ -185,7 +206,7 @@ export default function Signup({ show, setShow }) {
 								!signupFail
 							) || loading
 						}
-						className={classes.signupBtn}
+						className="px-5 font-medium bg-[#2e69ff] w-fit self-center text-[#fff] h-10 rounded-full hover:bg-[rgb(26,90,255)] disabled:opacity-40 disabled:bg-blue-500 disabled:text-slate-300 my-3"
 						onClick={handleSignup}
 					>
 						Signup

@@ -1,11 +1,8 @@
 .background {
-	@apply absolute w-full h-full flex justify-center items-center bg-black/75 top-0 left-0
-	px-10;
+	@apply absolute w-full h-full flex justify-center items-center bg-black/75 top-0 left-0	px-10;
 }
 .container {
-	@apply bg-white border border-[#dee0e1] rounded-xl
-	md:w-[600px] w-full flex flex-col md:text-[14px] text-[12px]
-	dark:bg-[#181818] dark:border-[#393839];
+	@apply bg-white border border-[#dee0e1] rounded-xl	md:w-[600px] w-full flex flex-col md:text-[14px] text-[12px] dark:bg-[#181818] dark:border-[#393839];
 }
 .closeBtn {
 	@apply rounded-full w-fit p-2 hover:bg-slate-700/5 mt-2 ml-4;
@@ -23,13 +20,8 @@
 	@apply font-bold text-[13px] mb-1;
 }
 .field input {
-	@apply outline-none border-2 border-[#dee0e1] py-3 px-2 rounded
-    hover:border-[rgba(45,105,255,0.6)] focus:border-[rgb(46,105,255)]  focus:shadow-[rgb(235,240,255)0px0px0px2px] 
-	transition-colors placeholder:text-[10px] md:placeholder:text-[12px]
-    dark:bg-[#181818] dark:border-[#393839];
+	@apply outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[rgba(45,105,255,0.6)] focus:border-[rgb(46,105,255)]  focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors placeholder:text-[10px] md:placeholder:text-[12px] dark:bg-[#181818] dark:border-[#393839];
 }
 .signupBtn {
-	@apply px-5 font-medium bg-[#2e69ff] w-fit self-center text-[#fff] h-10 
-    rounded-full hover:bg-[rgb(26,90,255)] disabled:opacity-40
-     disabled:bg-blue-500 disabled:text-slate-300 my-3;
+	@apply px-5 font-medium bg-[#2e69ff] w-fit self-center text-[#fff] h-10 rounded-full hover:bg-[rgb(26,90,255)] disabled:opacity-40 disabled:bg-blue-500 disabled:text-slate-300 my-3;
 }
