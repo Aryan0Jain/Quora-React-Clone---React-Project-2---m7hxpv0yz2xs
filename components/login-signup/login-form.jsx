@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import classes from "./login-form.module.css";
 import { login } from "@/lib/actions";
+import { signIn } from "next-auth/react";
 import { isValidEmail } from "@/lib/utils";
 import ErrorBox from "./error-box";
-
+import { useRouter } from "next/navigation";
 const label = "text-[13px] font-bold w-fit mb-2";
 const input =
-	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[rgba(45,105,255,0.6)] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors dark:bg-[#181818] dark:border-[#393839]";
+	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[#2d69ff99] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors dark:bg-[#181818] dark:border-[#393839]";
 const btn =
 	"px-5 font-medium bg-[#2e69ff] w-fit self-center text-[#fff] h-10 rounded-full hover:bg-[rgb(26,90,255)] disabled:opacity-40 disabled:bg-blue-500 disabled:text-slate-300";
 export default function LoginForm() {
@@ -17,16 +17,51 @@ export default function LoginForm() {
 	const [loginFail, setLoginFail] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const router = useRouter();
 	async function handleLogin(e) {
 		setLoading(true);
 		e.preventDefault();
-		const data = await login(email, password);
-		if (data.message) {
-			setLoginFail(true);
-			setErrorMessage(data.message);
+		const res = await signIn("credentials", {
+			redirect: false,
+			email: email,
+			password: password,
+		});
+		// const data = await res.json();
+		if (!res.error) {
+			router.push("/");
+			router.refresh();
+			return;
 		}
-		setLoading(false);
+		if (res.status === 401) {
+			setLoginFail(true);
+			setErrorMessage("Incorrect EmailId or Password");
+		} else {
+			setLoginFail(true);
+			setErrorMessage(
+				"OOPS! Some error occured. Please try again later."
+			);
+		}
+		// const res = await fetch("/api/login", {
+		// 	method: "POST",
+		// 	headers: { "Content-Type": "application/json" },
+		// 	body: JSON.stringify({
+		// 		email: email,
+		// 		password: password,
+		// 	}),
+		// });
+		// const data = await res.json();
 		// console.log(data);
+		// if (data.message !== "") {
+		// 	setLoginFail(true);
+		// 	setErrorMessage(data.message);
+		// } else {
+		// 	const userdetails = {
+		// 		name: data.data.name,
+		// 		email: data.data.email,
+		// 		token: data.token,
+		// 	};
+		// }
+		setLoading(false);
 	}
 	useEffect(() => {
 		const emailTimeout = setTimeout(() => {

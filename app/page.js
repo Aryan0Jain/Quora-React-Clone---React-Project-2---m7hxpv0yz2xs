@@ -1,20 +1,9 @@
 "use client";
-import { ThemeProvider } from "next-themes";
-import Login from "@/components/login-signup/login";
-// import { cookies } from "next/headers";
-export default async function Home() {
-	// const store = cookies();
-	// console.log(JSON.parse(store.get("userdata").value).token)
-	// const data = useFormState();
+import Navbar from "@/components/home/navbar/navbar";
+export default function Home() {
 	return (
-		<ThemeProvider
-			attribute="class"
-			defaultTheme="system"
-			enableSystem
-			disableTransitionOnChange
-		>
-			<Login />
-			<div id="portal"></div>
-		</ThemeProvider>
+		<div className="bg-[#F1F2F2]">
+			<Navbar />
+		</div>
 	);
 }

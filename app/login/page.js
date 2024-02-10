@@ -1,6 +1,14 @@
 import Login from "@/components/login-signup/login";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import React from "react";
 
-export default function LoginComponent() {
-	return <Login />;
+export default async function LoginComponent() {
+	const session = await getServerSession();
+	console.log(session);
+	if (session) {
+		redirect("/");
+	} else {
+		return <Login />;
+	}
 }

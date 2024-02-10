@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { RxCross2 } from "react-icons/rx";
-import classes from "./signup.module.css";
-import { signup } from "@/lib/actions";
 import { isValidEmail } from "@/lib/utils";
 import ErrorBox from "./error-box";
 // import { useTheme } from "next-themes";
 const input =
 	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[rgba(45,105,255,0.6)] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[rgb(46,105,255)] dark:focus:border-[rgb(46,105,255)] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors placeholder:text-[10px] md:placeholder:text-[12px] dark:bg-[#181818] dark:border-[#393839]";
-export default function Signup({ show, setShow }) {
+export default function Signup({ show, setShow, setReadyToLogIn }) {
 	const [ready, setReady] = useState(false);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
@@ -26,16 +24,27 @@ export default function Signup({ show, setShow }) {
 	async function handleSignup(e) {
 		setLoading(true);
 		e.preventDefault();
-		const data = await signup(name, email, pass);
-		if (data.message) {
-			if (data.message !== "User already exists") {
-				setSignupFail(true);
-			} else {
-				setErrorMessage(data.message);
-			}
+		const data = await fetch("/api/signup", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				name: name,
+				email: email,
+				password: pass,
+			}),
+		});
+		const res = await data.json();
+		if (res.message === "User already exists") {
+			setErrorMessage(res.message);
+		} else if (
+			res.message === "Some Error Occured. Please try again later."
+		) {
+			setSignupFail(true);
+		} else {
+			setShow(false);
+			setReadyToLogIn(true);
 		}
 		setLoading(false);
-		// console.log(data);
 	}
 	useEffect(() => {
 		setReady(true);

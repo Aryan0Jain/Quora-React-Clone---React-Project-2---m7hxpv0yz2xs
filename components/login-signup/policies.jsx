@@ -4,6 +4,7 @@ import classes from "./policies.module.css";
 import Signup from "./signup";
 export default function Policies() {
 	const [showSignUp, setShowSignUp] = useState(false);
+	const [readToLogin, setReadyToLogIn] = useState(false);
 	return (
 		<div className="w-full flex flex-col gap-7 sm:px-6 px-4 pb-4 border-r border-[#dee0e1] dark:border-[#393839]">
 			<div className="text-[#939598] text-[12px] sm:text-[13px]">
@@ -73,8 +74,20 @@ export default function Policies() {
 				>
 					Sign Up
 				</button>
+				{readToLogin && (
+					<div className="bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded p-4">
+						Congrats!! Your account has been created. You can now
+						use those credentials to login.
+					</div>
+				)}
 			</div>
-			{showSignUp && <Signup show={showSignUp} setShow={setShowSignUp} />}
+			{showSignUp && (
+				<Signup
+					show={showSignUp}
+					setShow={setShowSignUp}
+					setReadyToLogIn={setReadyToLogIn}
+				/>
+			)}
 		</div>
 	);
 }
