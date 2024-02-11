@@ -1,6 +1,8 @@
 import NextThemeProvider from "@/components/contexts/theme-provider";
 import "./globals.css";
+import Session from "@/components/contexts/session-provider";
 import { getServerSession } from "next-auth";
+import Navbar from "@/components/home/navbar/navbar";
 
 export const metadata = {
 	title: "Quora - A place to share knowledge and better understand the world",
@@ -8,16 +10,17 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-	// const session = await getServerSession();
-	// console.log(session);
-
+	const session = await getServerSession();
 	return (
 		<html lang="en">
 			<body>
-				<NextThemeProvider>
-					{children}
-					<div id="portal"></div>
-				</NextThemeProvider>
+				<Session>
+					<NextThemeProvider>
+						{session && <Navbar />}
+						{children}
+						<div id="portal"></div>
+					</NextThemeProvider>
+				</Session>
 			</body>
 		</html>
 	);

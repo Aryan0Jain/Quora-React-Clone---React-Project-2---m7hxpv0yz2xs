@@ -5,7 +5,6 @@ import React from "react";
 
 export default async function LoginComponent() {
 	const session = await getServerSession();
-	console.log(session);
 	if (session) {
 		redirect("/");
 	} else {
