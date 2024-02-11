@@ -7,7 +7,8 @@ export default function SpacesIcon() {
 			width="24"
 			height="24"
 			viewBox="0 0 24 24"
-			className={NAV_ICON_CLASS}
+			// className={NAV_ICON_CLASS}
+			className="dark:fill-[#b1b3b6] fill-[#636466] hover:opacity-70 w-10 md:w-14 h-7 transition-opacity"
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path d="M17.7 9.25C16.75 9.25 15.98 9.52 15.37 9.92C15.8 10.23 16.18 10.6 16.49 11.01C16.83 10.85 17.23 10.75 17.7 10.75C19.48 10.75 20.25 12.12 20.25 12.81V20.25H17.55V21C17.55 21.26 17.5 21.51 17.41 21.75H21C21.41 21.75 21.75 21.41 21.75 21V12.81C21.75 11.32 20.34 9.25 17.7 9.25Z"></path>

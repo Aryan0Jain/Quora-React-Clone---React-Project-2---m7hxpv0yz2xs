@@ -17,8 +17,10 @@ export default async function RootLayout({ children }) {
 				<Session>
 					<NextThemeProvider>
 						{session && <Navbar />}
-						{children}
-						<div id="portal"></div>
+						<div className="bg-[#F1F2F2] dark:bg-[#181818]">
+							{children}
+							<div id="portal"></div>
+						</div>
 					</NextThemeProvider>
 				</Session>
 			</body>

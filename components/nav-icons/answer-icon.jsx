@@ -7,7 +7,8 @@ export default function AnswerIcon() {
 			width="24"
 			height="24"
 			viewBox="0 0 24 24"
-			className={NAV_ICON_CLASS}
+			// className={NAV_ICON_CLASS}
+			className="dark:fill-[#b1b3b6] fill-[#636466] hover:opacity-70 w-10 md:w-14 h-7 transition-opacity"
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<path

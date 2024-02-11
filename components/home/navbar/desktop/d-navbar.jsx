@@ -8,8 +8,10 @@ import quoraLogo from "@/assets/quora.png";
 import SearchBox from "./searchbox";
 import { useTheme } from "next-themes";
 import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 export default function DesktopNavbar() {
-	const { theme, setTheme } = useTheme();
+	const { theme, setTheme, systemTheme } = useTheme();
+	const pathName = usePathname();
 	function themeToggle() {
 		if (theme === "light") setTheme("dark");
 		else setTheme("light");
@@ -32,19 +34,27 @@ export default function DesktopNavbar() {
 				{NAV_ICONS.map(({ path, Icon, ActiveIcon }) => {
 					return (
 						<Link key={path} href={`/${path}`}>
-							<div className="flex flex-col items-center gap-1">
-								<div className="flex flex-col items-center hover:bg-white/5 transition">
-									<Icon />
-									{/* <ActiveIcon /> */}
-								</div>
-								<div className="w-9/12 h-[3px] bg-[#f52936] rounded-full"></div>
+							<div className="flex flex-col items-center gap-1 relative">
+								<div className="flex flex-col items-center hover:bg-white/5 transition"></div>
+								{`/${path}` === pathName && (
+									<>
+										<ActiveIcon />
+										<div className="w-9/12 h-[3px] bg-[#f52936] rounded-full absolute -bottom-2"></div>
+									</>
+								)}
+								{`/${path}` !== pathName && (
+									<>
+										<Icon />
+										<div className="w-9/12 h-[3px] bg-transparent rounded-full absolute -bottom-2"></div>
+									</>
+								)}
 							</div>
 						</Link>
 					);
 				})}
 			</div>
 			<SearchBox />
-			{/* <button onClick={themeToggle}>Toggle</button> */}
+			<button onClick={themeToggle}>Toggle</button>
 			<button onClick={handleLogOut}>Log out</button>
 			<button className="hover:opacity-70 p-2 m-1 ml-2 hover:bg-white/5 flex justify-center items-center rounded-[3px] transition">
 				<Image
