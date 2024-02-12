@@ -1,9 +1,13 @@
+"use client";
 import { NAV_ICONS } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import userImg from "@/assets/default_user.webp";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+
 export default function MobileTabs() {
+	const pathName = usePathname();
 	return (
 		<div className="flex dark:bg-[#202020]">
 			{NAV_ICONS.map(({ path, Icon, ActiveIcon }) => {
@@ -13,7 +17,8 @@ export default function MobileTabs() {
 						href={path}
 						className="flex-1 flex justify-center items-center border-r border-y border-[#dee0e1] dark:border-[#393839] h-11"
 					>
-						<Icon />
+						{`/${path}` === pathName && <ActiveIcon />}
+						{`/${path}` !== pathName && <Icon />}
 					</Link>
 				);
 			})}

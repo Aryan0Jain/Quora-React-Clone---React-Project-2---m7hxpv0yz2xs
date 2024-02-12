@@ -34,7 +34,7 @@ export default function HeroSection() {
 		loadPosts();
 	}, []);
 	return (
-		<div className="flex flex-col gap-2 mt-4 w-[550px]">
+		<div className="flex flex-col gap-2 mt-4 w-full md:w-[550px]">
 			{loading && <HeroSectionLoader />}
 			{!loading && (
 				<>

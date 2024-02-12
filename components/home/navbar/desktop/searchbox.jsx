@@ -31,7 +31,7 @@ export default function SearchBox() {
 		containerRef.current.classList.remove("w-72");
 	}
 	return (
-		<div className="relative w-60 h-full bg-white dark:bg-[#262626]">
+		<div className="relative w-60 h-12 bg-white dark:bg-[#262626]">
 			<div
 				ref={containerRef}
 				onClick={() => inputRef.current.focus()}

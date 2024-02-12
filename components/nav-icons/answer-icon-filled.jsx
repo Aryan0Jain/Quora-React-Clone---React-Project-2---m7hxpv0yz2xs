@@ -9,7 +9,7 @@ export default function AnswerIconFilled() {
 			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
 			// className={NAV_ICON_FILLED_CLASS}
-			className="fill-[#b92b27] hover:opacity-70 dark:fill-[#f52936] w-14 h-7 transition-opacity"
+			className="fill-[#b92b27] hover:opacity-70 dark:fill-[#f52936] w-10 md:w-14 h-7 transition-opacity"
 		>
 			<path d="M20.5 11.75C20.09 11.75 19.75 12.09 19.75 12.5V19.75H12.5C12.09 19.75 11.75 20.09 11.75 20.5C11.75 20.91 12.09 21.25 12.5 21.25H20.5C20.91 21.25 21.25 20.91 21.25 20.5V12.5C21.25 12.09 20.91 11.75 20.5 11.75Z"></path>
 			<path d="M4.25 11.5V4.25H11.5C11.91 4.25 12.25 3.91 12.25 3.5C12.25 3.09 11.91 2.75 11.5 2.75H3.5C3.09 2.75 2.75 3.09 2.75 3.5V11.5C2.75 11.91 3.09 12.25 3.5 12.25C3.91 12.25 4.25 11.91 4.25 11.5Z"></path>

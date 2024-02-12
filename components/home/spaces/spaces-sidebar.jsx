@@ -28,7 +28,7 @@ export default function SpacesSidebar() {
 		getSpaces();
 	}, []);
 	return (
-		<div className="flex flex-col gap-2 mt-4">
+		<div className="sticky top-[72px] flex flex-col gap-2 mt-4 w-[145px]">
 			{loading &&
 				Array.from({ length: 9 }).map((_, i) => {
 					return (
@@ -40,7 +40,7 @@ export default function SpacesSidebar() {
 				})}
 			{!loading && (
 				<>
-					<div className="w-36 p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer">
+					<div className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer">
 						<div className="flex items-center gap-2 mx-auto w-fit">
 							<div className="bg-[#e6e7e8] dark:bg-[#262626] p-1 rounded">
 								<GoPlus
@@ -57,7 +57,7 @@ export default function SpacesSidebar() {
 						return (
 							<div
 								key={_id}
-								className="flex gap-2 items-center p-2 w-36 hover:bg-[#E4E6E6] dark:hover:bg-[#1D1D1D] cursor-pointer transition duration-200"
+								className="flex gap-2 items-center p-2 hover:bg-[#E4E6E6] dark:hover:bg-[#1D1D1D] cursor-pointer transition duration-200"
 							>
 								<Image
 									src={image}
