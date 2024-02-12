@@ -9,8 +9,8 @@ export default function DownVote({ className }) {
 		>
 			<path
 				d="m12 20 9-11h-6V4H9v5H3z"
-				stroke-width="1.8"
-				stroke-linejoin="round"
+				strokeWidth="1.8"
+				strokeLinejoin="round"
 			></path>
 		</svg>
 	);

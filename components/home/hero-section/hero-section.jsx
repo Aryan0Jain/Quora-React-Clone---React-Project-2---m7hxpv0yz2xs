@@ -27,7 +27,7 @@ export default function HeroSection() {
 				}
 			);
 			const res = await data.json();
-			console.log(res);
+			// console.log(res);
 			setPosts([...posts, ...res.data]);
 			setLoading(false);
 		}
