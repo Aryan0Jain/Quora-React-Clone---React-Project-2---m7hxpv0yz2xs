@@ -9,26 +9,33 @@ import { GoPlus } from "react-icons/go";
 export default function SpacesSidebar() {
 	const [loading, setLoading] = useState(true);
 	const [spaces, setSpaces] = useState([]);
+	const [hasError, setHasError] = useState(false);
 	useEffect(() => {
 		async function getSpaces() {
-			const data = await fetch(
-				"https://academics.newtonschool.co/api/v1/quora/channel?limit=8",
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-						projectID: projectID,
-					},
-				}
-			);
-			const res = await data.json();
-			setSpaces(res.data);
-			setLoading(false);
+			setHasError(false);
+			try {
+				const data = await fetch(
+					"https://academics.newtonschool.co/api/v1/quora/channel?limit=10",
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							projectID: projectID,
+						},
+					}
+				);
+				const res = await data.json();
+				setSpaces(res.data);
+			} catch (error) {
+				setHasError(true);
+			} finally {
+				setLoading(false);
+			}
 		}
 		getSpaces();
 	}, []);
 	return (
-		<div className="sticky top-[72px] flex flex-col gap-2 mt-4 w-[145px]">
+		<div className="sticky top-[72px] flex flex-col gap-[6px] mt-4 w-[145px]">
 			{loading &&
 				Array.from({ length: 9 }).map((_, i) => {
 					return (
@@ -38,7 +45,7 @@ export default function SpacesSidebar() {
 						></div>
 					);
 				})}
-			{!loading && (
+			{!loading && !hasError && (
 				<>
 					<div className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer">
 						<div className="flex items-center gap-2 mx-auto w-fit">
@@ -72,9 +79,10 @@ export default function SpacesSidebar() {
 							</div>
 						);
 					})}
+					<Footer />
 				</>
 			)}
-			<Footer />
+			{/* {hasError && <div>Some Error Occured</div>} */}
 		</div>
 	);
 }

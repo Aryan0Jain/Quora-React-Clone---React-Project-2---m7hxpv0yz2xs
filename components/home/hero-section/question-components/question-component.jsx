@@ -10,6 +10,7 @@ import DownVote from "./downvote";
 import CommentIcon from "./comment-icon";
 import imgPlaceholder from "@/assets/image-placeholder.jpg";
 import { useDataContext } from "@/components/contexts/data-provider";
+import { toggleVote } from "@/lib/actions";
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
 	// console.log(session, status);
@@ -27,8 +28,28 @@ export default function QuestionComponent(data) {
 	const date = new dayjs(createdAt);
 	const { name = "John Doe", profileImage, _id: aid } = author;
 	const [following, setFollowing] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const { reloadFollowing, setReloadFollowing, setDisplayMessageBox } =
 		useDataContext();
+	const [upvoted, setUpvoted] = useState(false);
+	async function checkIfVoted() {
+		const data = await toggleVote(true, session.user.jwt, _id);
+		if (data.message === "success") {
+			setUpvoted(false);
+		} else {
+			await toggleVote(false, session.user.jwt, _id);
+			setUpvoted(true);
+		}
+	}
+	async function handleUpvoteButton() {
+		if (!upvoted) {
+			toggleVote(true, session.user.jwt, _id);
+			setUpvoted(true);
+		} else {
+			toggleVote(false, session.user.jwt, _id);
+			setUpvoted(false);
+		}
+	}
 	async function toggleFollowing() {
 		const data = await fetch(
 			`https://academics.newtonschool.co/api/v1/quora/follow/${aid}`,
@@ -45,30 +66,66 @@ export default function QuestionComponent(data) {
 		setFollowing((prev) => !prev);
 		setReloadFollowing(true);
 	}
+	async function getFollowing() {
+		const data = await fetch(
+			`https://academics.newtonschool.co/api/v1/quora/user/${aid}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					projectID: projectID,
+					Authorization: `Bearer ${session.user.jwt}`,
+				},
+			}
+		);
+		const res = await data.json();
+		// console.log(res);
+		setFollowing(res.data.isFollowed);
+		setReloadFollowing(false);
+	}
 	useEffect(() => {
-		async function getFollowing() {
-			const data = await fetch(
-				`https://academics.newtonschool.co/api/v1/quora/user/${aid}`,
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-						projectID: projectID,
-						Authorization: `Bearer ${session.user.jwt}`,
-					},
-				}
-			);
-			const res = await data.json();
-			// console.log(res);
-			setFollowing(res.data.isFollowed);
-			setReloadFollowing(false);
+		async function checker() {
+			if (status === "authenticated") {
+				await getFollowing();
+				await checkIfVoted();
+				setLoading(false);
+			}
 		}
-		if (status === "authenticated") getFollowing();
-	}, [reloadFollowing]);
+		checker();
+	}, [status]);
+	useEffect(() => {
+		if (status === "authenticated") {
+			checkIfVoted();
+		}
+	});
 	return (
 		<>
-			{status === "loading" && <div></div>}
-			{status !== "loading" && (
+			{status === "loading" ||
+				(loading && (
+					<div className="bg-[#FFF] dark:bg-[#262626] animate-pulse border border-[#dee0e1] dark:border-[#262626] rounded">
+						<div className="h-11 flex px-2 gap-2 items-center">
+							<div className="h-9 w-9 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+							<div className="flex flex-col gap-2 h-full w-full py-2">
+								<div className="flex-grow w-1/4 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+								<div className="flex-grow w-10/12 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+							</div>
+						</div>
+						<div className="h-44 flex flex-col px-2 gap-2 py-3">
+							<div className="h-5 w-9/12 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+							<div className="flex flex-col py-2 px-3 justify-between h-full">
+								{Array.from({ length: 6 }).map((_, i) => {
+									return (
+										<div
+											key={i}
+											className="h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"
+										></div>
+									);
+								})}
+							</div>
+						</div>
+					</div>
+				))}
+			{status !== "loading" && !loading && (
 				<div className="bg-[#FFF] dark:bg-[#262626] border border-[#dee0e1] dark:border-[#262626] rounded p-3 flex flex-col gap-1">
 					<div className="flex gap-3">
 						<Image
@@ -126,10 +183,14 @@ export default function QuestionComponent(data) {
 					</div>
 					<div className="flex gap-2">
 						<div className="flex rounded-full border dark:border-[#393839] bg-[#00000108] dark:bg-[#ffffff0d]">
-							<button className="flex gap-2 px-2 py-1 items-center hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition">
+							<button
+								onClick={handleUpvoteButton}
+								className="flex gap-2 px-2 py-1 items-center hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition"
+							>
 								<Upvote
 									className={
-										"w-5 h-5 fill-none stroke-[#2e69ff]"
+										"w-5 h-5 fill-none stroke-[#2e69ff]" +
+										(upvoted ? " fill-[#2e69ff]" : "")
 									}
 								/>
 								<span
