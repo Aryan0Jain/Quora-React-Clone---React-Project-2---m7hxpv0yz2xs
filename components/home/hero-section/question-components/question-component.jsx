@@ -3,17 +3,17 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import userImg from "@/assets/default_user.webp";
 import { useSession } from "next-auth/react";
-import { projectID } from "@/lib/utils";
 import dayjs from "dayjs";
 import Upvote from "./upvote";
 import DownVote from "./downvote";
 import CommentIcon from "./comment-icon";
 import imgPlaceholder from "@/assets/image-placeholder.jpg";
 import { useDataContext } from "@/components/contexts/data-provider";
-import { toggleVote } from "@/lib/actions";
+import { getPostDetail, toggleDownVote, toggleUpVote } from "@/lib/actions";
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
 	// console.log(session, status);
+	const [postData, setPostData] = useState(data);
 	const {
 		author,
 		commentCount,
@@ -24,80 +24,31 @@ export default function QuestionComponent(data) {
 		likeCount,
 		title,
 		_id,
-	} = data;
+		isDisliked,
+		isLiked,
+	} = postData;
 	const date = new dayjs(createdAt);
 	const { name = "John Doe", profileImage, _id: aid } = author;
-	const [following, setFollowing] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const { reloadFollowing, setReloadFollowing, setDisplayMessageBox } =
-		useDataContext();
-	const [upvoted, setUpvoted] = useState(false);
-	async function checkIfVoted() {
-		const data = await toggleVote(true, session.user.jwt, _id);
-		if (data.message === "success") {
-			setUpvoted(false);
-		} else {
-			await toggleVote(false, session.user.jwt, _id);
-			setUpvoted(true);
-		}
-	}
+	const { setDisplayMessageBox } = useDataContext();
+
 	async function handleUpvoteButton() {
-		if (!upvoted) {
-			toggleVote(true, session.user.jwt, _id);
-			setUpvoted(true);
-		} else {
-			toggleVote(false, session.user.jwt, _id);
-			setUpvoted(false);
-		}
+		const data = await toggleUpVote(!isLiked, session.user.jwt, _id);
+		reLoadPostData();
 	}
-	async function toggleFollowing() {
-		const data = await fetch(
-			`https://academics.newtonschool.co/api/v1/quora/follow/${aid}`,
-			{
-				method: following ? "DELETE" : "POST",
-				headers: {
-					"Content-Type": "application/json",
-					projectID: projectID,
-					Authorization: `Bearer ${session.user.jwt}`,
-				},
-			}
-		);
-		const res = await data.json();
-		setFollowing((prev) => !prev);
-		setReloadFollowing(true);
+	async function handleDownvoteButton() {
+		const data = await toggleDownVote(!isDisliked, session.user.jwt, _id);
+		reLoadPostData();
 	}
-	async function getFollowing() {
-		const data = await fetch(
-			`https://academics.newtonschool.co/api/v1/quora/user/${aid}`,
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					projectID: projectID,
-					Authorization: `Bearer ${session.user.jwt}`,
-				},
-			}
-		);
-		const res = await data.json();
-		// console.log(res);
-		setFollowing(res.data.isFollowed);
-		setReloadFollowing(false);
+	async function reLoadPostData() {
+		const res = await getPostDetail(session.user.jwt, _id);
+		setPostData(res);
 	}
-	useEffect(() => {
-		async function checker() {
-			if (status === "authenticated") {
-				await getFollowing();
-				await checkIfVoted();
-				setLoading(false);
-			}
-		}
-		checker();
-	}, [status]);
 	useEffect(() => {
 		if (status === "authenticated") {
-			checkIfVoted();
+			setLoading(false);
 		}
-	});
+	}, [status]);
 	return (
 		<>
 			{status === "loading" ||
@@ -137,23 +88,10 @@ export default function QuestionComponent(data) {
 						/>
 						<div>
 							<div className="flex gap-2 items-center font-bold text-[13px]">
-								<span className="text-[#282829] dark:text-[#d5d6d6]">
+								<span className="text-[#282829] dark:text-[#d5d6d6] capitalize">
 									{name}
 								</span>
 								<span className="bg-[#636466] w-[2px] h-[2px] rounded-full"></span>
-								{session.user.id === aid && (
-									<span className="text-[#2e69ff] font-medium">
-										You
-									</span>
-								)}
-								{session.user.id !== aid && (
-									<button
-										onClick={toggleFollowing}
-										className="text-[#2e69ff] font-medium hover:underline"
-									>
-										{following ? "Unfollow" : "Follow"}
-									</button>
-								)}
 							</div>
 							<div className="text-[13px] text-[#636466] dark:text-[#b1b3b6]">
 								{date.format("DD, MMMM YYYY")}
@@ -189,8 +127,10 @@ export default function QuestionComponent(data) {
 							>
 								<Upvote
 									className={
-										"w-5 h-5 fill-none stroke-[#2e69ff]" +
-										(upvoted ? " fill-[#2e69ff]" : "")
+										"w-5 h-5 stroke-[#2e69ff] " +
+										(isLiked
+											? "fill-[#2e69ff]"
+											: "fill-none")
 									}
 								/>
 								<span
@@ -204,12 +144,27 @@ export default function QuestionComponent(data) {
 								</span>
 							</button>
 							<div className="h-full border dark:border-[#393839]"></div>
-							<button className="px-2 py-1 hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition">
+							<button
+								onClick={handleDownvoteButton}
+								className="flex gap-2 px-2 py-1 items-center hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition"
+							>
 								<DownVote
 									className={
-										"w-5 h-5 fill-none stroke-[#636466] dark:stroke-[#b1b3b6]"
+										"w-5 h-5 dark:stroke-[#b1b3b6] " +
+										(isDisliked
+											? "fill-[#cb4b10] stroke-[#cb4b10]"
+											: "fill-none stroke-[#636466]")
 									}
 								/>
+								<span
+									className={`text-[#636466] dark:text-[#b1b3b6] font-medium text-[13px]`}
+								>
+									Downvote
+								</span>
+								<span className="bg-[#636466] dark:bg-[#b1b3b6] w-[2px] h-[2px] rounded-full"></span>
+								<span className="text-[13px] text-[#636466] dark:text-[#b1b3b6]">
+									{dislikeCount}
+								</span>
 							</button>
 						</div>
 						<button className="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a]">

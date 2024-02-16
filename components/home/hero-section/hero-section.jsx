@@ -38,6 +38,7 @@ export default function HeroSection() {
 					headers: {
 						"Content-Type": "application/json",
 						projectID: projectID,
+						Authorization: `Bearer ${session.user.jwt}`,
 					},
 				}
 			);
@@ -63,8 +64,8 @@ export default function HeroSection() {
 	});
 	useEffect(() => {
 		window.scrollTo(0, 0);
-		loadPosts();
-	}, []);
+		if (status === "authenticated") loadPosts();
+	}, [status]);
 	return (
 		<div className="flex flex-col gap-2 mt-4 w-full md:w-[550px] mb-4">
 			{loading && <HeroSectionLoader />}

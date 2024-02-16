@@ -20,7 +20,7 @@ export default async function RootLayout({ children }) {
 					<DataContextProvider>
 						<NextThemeProvider>
 							{session && <Navbar />}
-							<div className="bg-[#F1F2F2] dark:bg-[#181818]">
+							<div className="bg-[#F1F2F2] dark:bg-[#181818] flex justify-center">
 								{children}
 								<div id="portal">
 									<MessageBox />

@@ -2,23 +2,22 @@
 import { NAV_ICONS } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import userImg from "@/assets/default_user.webp";
 import quoraLogo from "@/assets/quora.png";
 import SearchBox from "./searchbox";
-import { useTheme } from "next-themes";
-import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import ProfileDropDown from "./profile-dropdown";
+import CreatePost from "../../create-post";
 export default function DesktopNavbar() {
-	const { theme, setTheme, systemTheme } = useTheme();
+	const [showMenu, setShowMenu] = useState(false);
 	const pathName = usePathname();
-	function themeToggle() {
-		if (theme === "light") setTheme("dark");
-		else setTheme("light");
+	const [showCreatePost, setShowCreatePost] = useState(false);
+	function toggleShowMenu() {
+		setShowMenu((prev) => !prev);
 	}
-	async function handleLogOut() {
-		const data = await signOut();
-		console.log(data);
+	function closeShowMenu() {
+		setShowMenu(false);
 	}
 	return (
 		<div className="mx-auto h-full w-fit md:flex items-center gap-1 hidden">
@@ -54,18 +53,30 @@ export default function DesktopNavbar() {
 				})}
 			</div>
 			<SearchBox />
-			<button onClick={themeToggle}>Toggle</button>
-			<button onClick={handleLogOut}>Log out</button>
-			<button className="hover:opacity-70 p-2 m-1 ml-2 hover:bg-white/5 flex justify-center items-center rounded-[3px] transition">
-				<Image
-					src={userImg}
-					alt="Profile for User"
-					className="w-6 h-6 rounded-full"
+			<div className="relative p-3">
+				<button
+					onClick={toggleShowMenu}
+					className="ml-2 lg:ml-4 flex justify-center items-center rounded-[3px] transition"
+				>
+					<Image
+						src={userImg}
+						alt="Profile for User"
+						className="w-6 h-6 rounded-full hover:bg-white/5 hover:opacity-70"
+					/>
+				</button>
+				<ProfileDropDown
+					showMenu={showMenu}
+					toggleMenu={toggleShowMenu}
+					closeMenu={closeShowMenu}
 				/>
-			</button>
-			<button className="dark:bg-[#f52936] text-[#fff] rounded-full ml-2 py-2 px-3 font-medium text-[13px] leading-none bg-[#b92b27] hover:bg-[#a82723] transition">
+			</div>
+			<button
+				onClick={() => setShowCreatePost(true)}
+				className="dark:bg-[#f52936] text-[#fff] rounded-full ml-2 py-2 px-2 lg:px-3 font-medium text-[13px] leading-none bg-[#b92b27] hover:bg-[#a82723] transition"
+			>
 				Create Post
 			</button>
+			<CreatePost show={showCreatePost} setShow={setShowCreatePost} />
 		</div>
 	);
 }

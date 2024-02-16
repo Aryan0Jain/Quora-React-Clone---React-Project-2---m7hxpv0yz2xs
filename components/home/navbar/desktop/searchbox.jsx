@@ -31,11 +31,11 @@ export default function SearchBox() {
 		containerRef.current.classList.remove("w-72");
 	}
 	return (
-		<div className="relative w-60 h-12 bg-white dark:bg-[#262626]">
+		<div className="relative w-60 h-12 z-10 bg-white dark:bg-[#262626]">
 			<div
 				ref={containerRef}
 				onClick={() => inputRef.current.focus()}
-				className="absolute top-0 left-0 w-60 flex bg-white dark:bg-[#181818] m-2 p-2 gap-2 rounded-[3px] border border-[#dee0e1] dark:border-[#393839] hover:border-[#2e69ff] dark:hover:border-[#2e69ff]"
+				className="absolute top-0 left-0 w-60 flex bg-white dark:bg-[#181818] my-2 lg:mx-2 p-2 gap-2 rounded-[3px] border border-[#dee0e1] dark:border-[#393839] hover:border-[#2e69ff] dark:hover:border-[#2e69ff]"
 			>
 				<FiSearch
 					size={16}

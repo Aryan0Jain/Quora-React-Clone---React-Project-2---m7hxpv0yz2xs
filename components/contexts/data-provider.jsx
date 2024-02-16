@@ -8,7 +8,6 @@ export const useDataContext = () => {
 export default function DataContextProvider({ children }) {
 	const [user, setUser] = useState({});
 	const [reloadPosts, setReloadPosts] = useState(false);
-	const [reloadFollowing, setReloadFollowing] = useState(false);
 	const [displayMessageBox, setDisplayMessageBox] = useState(false);
 	const [displayMessage, setDisplayMessage] = useState("This is a test.");
 	const [messageType, setMessageType] = useState("success");
@@ -17,8 +16,6 @@ export default function DataContextProvider({ children }) {
 		setUser,
 		reloadPosts,
 		setReloadPosts,
-		reloadFollowing,
-		setReloadFollowing,
 		displayMessageBox,
 		setDisplayMessageBox,
 		displayMessage,
