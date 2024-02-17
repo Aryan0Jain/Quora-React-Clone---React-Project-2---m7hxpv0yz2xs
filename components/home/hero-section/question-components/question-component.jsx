@@ -27,6 +27,7 @@ export default function QuestionComponent(data) {
 		isDisliked,
 		isLiked,
 	} = postData;
+	// console.log(postData);
 	const date = new dayjs(createdAt);
 	const { name = "John Doe", profileImage, _id: aid } = author;
 	const [loading, setLoading] = useState(true);
@@ -132,6 +133,7 @@ export default function QuestionComponent(data) {
 											? "fill-[#2e69ff]"
 											: "fill-none")
 									}
+									style={{}}
 								/>
 								<span
 									className={`text-[#636466] dark:text-[#b1b3b6] font-medium text-[13px]`}
@@ -152,12 +154,12 @@ export default function QuestionComponent(data) {
 									className={
 										"w-5 h-5 dark:stroke-[#b1b3b6] " +
 										(isDisliked
-											? "fill-[#cb4b10] stroke-[#cb4b10]"
+											? "fill-[#cb4b10] stroke-[#cb4b10] dark:stroke-[#cb4b10]"
 											: "fill-none stroke-[#636466]")
 									}
 								/>
 								<span
-									className={`text-[#636466] dark:text-[#b1b3b6] font-medium text-[13px]`}
+									className={`hidden sm:block text-[#636466] dark:text-[#b1b3b6] font-medium text-[13px]`}
 								>
 									Downvote
 								</span>

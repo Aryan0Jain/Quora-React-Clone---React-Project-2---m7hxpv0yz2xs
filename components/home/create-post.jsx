@@ -16,7 +16,7 @@ export default function CreatePost({ show, setShow }) {
 		setFiles([...e.target.files]);
 	}
 	function handleRemoveFile(index) {
-		const newFiles = files;
+		const newFiles = [...files];
 		newFiles.splice(index, 1);
 		setFiles(newFiles);
 	}
@@ -26,22 +26,26 @@ export default function CreatePost({ show, setShow }) {
 	async function addPost() {
 		const formData = new FormData();
 		formData.append("title", title);
+		setTitle("");
 		if (description) {
 			formData.append("content", description);
+			setDescription("");
 		}
 		if (files.length > 0) {
 			for (let file of files) formData.append("images", file);
+			setFiles([]);
 		}
+
 		const data = await createAPost(session.user.jwt, formData);
 		console.log(data);
 	}
 	return (
 		<Modal show={show} close={closeModal}>
-			<div className="h-screen w-screen md:h-fit md:max-w-[600px] bg-white rounded-lg p-4 flex flex-col items-start gap-2">
+			<div className="h-screen w-screen md:h-fit md:max-h-screen md:max-w-[600px] bg-white dark:bg-[#181818] rounded-lg p-6 flex flex-col items-start gap-2">
 				<div className="w-full flex justify-between items-center">
 					<button
 						onClick={closeModal}
-						className="rounded-full p-2 hover:bg-[rgba(0,0,0,0.1)] transition duration-300"
+						className="rounded-full p-2 hover:bg-[rgba(0,0,0,0.1)] dark:hover:bg-[#ffffff15] transition duration-300"
 					>
 						<RxCross2 size={24} />
 					</button>
@@ -58,7 +62,7 @@ export default function CreatePost({ show, setShow }) {
 					Create Post
 				</div>
 				<div className="w-full h-1 bg-[#2e69ff] rounded-t"></div>
-				<div className="p-3 w-full bg-[#ebf0ff] text-[#2e69ff] rounded-md">
+				<div className="p-3 w-full bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded-md text-[12px] sm:text-[15px]">
 					<div className="font-bold">
 						Tips on getting good answers quickly
 					</div>
@@ -71,7 +75,7 @@ export default function CreatePost({ show, setShow }) {
 					</ul>
 				</div>
 				<div className="w-full px-5 flex justify-between items-center">
-					<div className="flex gap-3 items-center">
+					<div className="flex gap-3 items-center w-full">
 						<label className="relative cursor-pointer">
 							<input
 								ref={imagesInput}
@@ -83,7 +87,7 @@ export default function CreatePost({ show, setShow }) {
 							/>
 							<FaRegImages size={24} />
 						</label>
-						<div className="flex gap-2 flex-wrap">
+						<div className="flex gap-3 flex-wrap max-h-[100px] w-full overflow-y-scroll">
 							{files.length === 0 && <div>No Files Chosen</div>}
 							{files.length > 0 &&
 								files.map(({ name, lastModified }, index) => {
@@ -114,7 +118,7 @@ export default function CreatePost({ show, setShow }) {
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 					id="post-title"
-					className="w-full outline-none border-2 p-2 focus:border-[#2e69ff]"
+					className="w-full outline-none border-2 dark:border-[#393839] p-2 focus:border-[#2e69ff] dark:focus:border-[#2e69ff] transition-all duration-300"
 					placeholder="Enter The Question or Title"
 				/>
 				<label htmlFor="post-content" className="font-semibold">
@@ -124,9 +128,9 @@ export default function CreatePost({ show, setShow }) {
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
 					id="post-content"
-					rows={8}
+					rows={10}
 					placeholder="Enter Description or Answer"
-					className="w-full outline-none border-2 p-2 focus:border-[#2e69ff]"
+					className="w-full outline-none border-2 dark:border-[#393839] p-2 focus:border-[#2e69ff] dark:focus:border-[#2e69ff]  transition-all duration-300"
 				/>
 			</div>
 		</Modal>

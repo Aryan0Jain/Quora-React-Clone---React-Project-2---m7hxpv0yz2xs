@@ -74,15 +74,15 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 								close={closeThemeModal}
 								show={showThemeModal}
 							>
-								<div
-									onClick={(e) => e.stopPropagation()}
-									className="bg-white dark:bg-[#181818] rounded-2xl p-4 flex flex-col gap-4"
-								>
+								<div className="bg-white dark:bg-[#181818] rounded-2xl p-6 flex flex-col gap-4">
 									<div className="flex justify-between items-center">
 										<div className="font-semibold text-lg">
 											Theme Setting
 										</div>
-										<button onClick={closeThemeModal}>
+										<button
+											onClick={closeThemeModal}
+											className="rounded-full p-2 hover:bg-[#0000000D] dark:hover:bg-[#ffffff0a] transition-colors duration-300"
+										>
 											<RxCross2 size={24} />
 										</button>
 									</div>

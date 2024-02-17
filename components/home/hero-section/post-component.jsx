@@ -1,8 +1,13 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import userImg from "@/assets/default_user.webp";
+import CreatePost from "../create-post";
 
 export default function PostComponent() {
+	const [isCreatePostVisible, setIsCreatePostVisible] = useState(false);
+	function showCreatePost() {
+		setIsCreatePostVisible(true);
+	}
 	return (
 		<div className="bg-[#FFF] dark:bg-[#262626] border border-[#dee0e1] dark:border-[#262626] rounded">
 			<div className="flex gap-2 px-2 py-2 items-center">
@@ -50,7 +55,10 @@ export default function PostComponent() {
 					</div>
 				</button>
 				<div className="border h-3/6 dark:border-[#393839]"></div>
-				<button className="flex-grow flex gap-2 items-center justify-center hover:bg-[rgba(0,0,0,0.03)] dark:hover:bg-[rgba(255,255,255,0.04)] rounded-full py-1 transition">
+				<button
+					onClick={showCreatePost}
+					className="flex-grow flex gap-2 items-center justify-center hover:bg-[rgba(0,0,0,0.03)] dark:hover:bg-[rgba(255,255,255,0.04)] rounded-full py-1 transition"
+				>
 					<svg
 						width="24"
 						height="24"
@@ -77,6 +85,10 @@ export default function PostComponent() {
 					</div>
 				</button>
 			</div>
+			<CreatePost
+				show={isCreatePostVisible}
+				setShow={setIsCreatePostVisible}
+			/>
 		</div>
 	);
 }
