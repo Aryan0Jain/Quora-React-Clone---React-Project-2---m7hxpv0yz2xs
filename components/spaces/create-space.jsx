@@ -4,10 +4,10 @@ import { RxCross2 } from "react-icons/rx";
 import { FaRegImages } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useRef, useState } from "react";
-import { createAPost } from "@/lib/actions";
+import { createASpace } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useDataContext } from "../contexts/data-provider";
-export default function CreatePost({ show, setShow }) {
+export default function CreateSpace({ show, setShow }) {
 	const [files, setFiles] = useState([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -25,20 +25,20 @@ export default function CreatePost({ show, setShow }) {
 	function closeModal() {
 		setShow(false);
 	}
-	async function addPost() {
+	async function addSpace() {
 		const formData = new FormData();
-		formData.append("title", title);
+		formData.append("name", title);
 		setTitle("");
 		if (description) {
-			formData.append("content", description);
+			formData.append("description", description);
 			setDescription("");
 		}
 		if (files.length > 0) {
-			for (let file of files) formData.append("images", file);
+			for (let file of files) formData.append("image", file);
 			setFiles([]);
 		}
 
-		const data = await createAPost(session.user.jwt, formData);
+		const data = await createASpace(session.user.jwt, formData);
 		closeModal();
 		setReloadPosts(true);
 	}
@@ -54,18 +54,18 @@ export default function CreatePost({ show, setShow }) {
 					</button>
 					<button
 						disabled={title === "" || title.length < 2}
-						onClick={addPost}
+						onClick={addSpace}
 						className="bg-[#2e69ff] hover:bg-[#1a5aff] disabled:opacity-35 disabled:hover:bg-[#2e69ff] text-white font-medium p-3 rounded-full transition duration-300"
 					>
-						Add Post
+						Create
 					</button>
 				</div>
 
 				<div className="text-[18px] font-semibold mx-auto text-center">
-					Create Post
+					Create Space
 				</div>
 				<div className="w-full h-1 bg-[#2e69ff] rounded-t"></div>
-				<div className="p-3 w-full bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded-md text-[12px] sm:text-[15px]">
+				{/* <div className="p-3 w-full bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded-md text-[12px] sm:text-[15px]">
 					<div className="font-bold">
 						Tips on getting good answers quickly
 					</div>
@@ -76,7 +76,7 @@ export default function CreatePost({ show, setShow }) {
 						<li>Keep your question short and to the point</li>
 						<li>Double-check grammar and spelling</li>
 					</ul>
-				</div>
+				</div> */}
 				<div className="w-full px-5 flex justify-between items-center">
 					<div className="flex gap-3 items-center w-full">
 						<label className="relative cursor-pointer">
@@ -84,14 +84,13 @@ export default function CreatePost({ show, setShow }) {
 								ref={imagesInput}
 								type="file"
 								className="absolute w-0 h-0"
-								multiple
 								accept="image/*"
 								onChange={filesBtnHandler}
 							/>
 							<FaRegImages size={24} />
 						</label>
 						<div className="flex gap-3 flex-wrap max-h-[100px] w-full overflow-y-scroll">
-							{files.length === 0 && <div>No Files Chosen</div>}
+							{files.length === 0 && <div>No File Chosen</div>}
 							{files.length > 0 &&
 								files.map(({ name, lastModified }, index) => {
 									return (
@@ -114,25 +113,25 @@ export default function CreatePost({ show, setShow }) {
 					</div>
 				</div>
 
-				<label htmlFor="post-title" className="font-semibold">
-					Post Title <span className="font-normal">(required)</span>:
+				<label htmlFor="space-title" className="font-semibold">
+					Space Title <span className="font-normal">(required)</span>:
 				</label>
 				<input
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
-					id="post-title"
+					id="space-title"
 					className="w-full outline-none border-2 dark:border-[#393839] p-2 focus:border-[#2e69ff] dark:focus:border-[#2e69ff] transition-all duration-300"
-					placeholder="Enter The Question or Title"
+					placeholder="Enter The Space Title"
 				/>
-				<label htmlFor="post-content" className="font-semibold">
-					Post Description :
+				<label htmlFor="space-content" className="font-semibold">
+					Space Description :
 				</label>
 				<textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
-					id="post-content"
+					id="space-content"
 					rows={10}
-					placeholder="Enter Description or Answer"
+					placeholder="Enter Description"
 					className="w-full outline-none border-2 dark:border-[#393839] p-2 focus:border-[#2e69ff] dark:focus:border-[#2e69ff]  transition-all duration-300"
 				/>
 			</div>

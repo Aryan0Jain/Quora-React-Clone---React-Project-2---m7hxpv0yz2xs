@@ -9,7 +9,18 @@ import DownVote from "./downvote";
 import CommentIcon from "./comment-icon";
 import imgPlaceholder from "@/assets/image-placeholder.jpg";
 import { useDataContext } from "@/components/contexts/data-provider";
-import { getPostDetail, toggleDownVote, toggleUpVote } from "@/lib/actions";
+import {
+	deletePost,
+	getPostDetail,
+	toggleDownVote,
+	toggleUpVote,
+} from "@/lib/actions";
+import Link from "next/link";
+import { MdEditNote } from "react-icons/md";
+import { RiDeleteBinLine } from "react-icons/ri";
+import Modal from "@/components/common/modal";
+import EditPost from "../../edit-post";
+
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
 	// console.log(session, status);
@@ -26,13 +37,21 @@ export default function QuestionComponent(data) {
 		_id,
 		isDisliked,
 		isLiked,
+		channel,
 	} = postData;
 	// console.log(postData);
 	const date = new dayjs(createdAt);
 	const { name = "John Doe", profileImage, _id: aid } = author;
 	const [loading, setLoading] = useState(true);
-	const { setDisplayMessageBox } = useDataContext();
-
+	const { setDisplayMessageBox, setReloadPosts } = useDataContext();
+	const [
+		showDeletePostConfirmationModal,
+		setShowDeletePostConfirmationModal,
+	] = useState(false);
+	const [showEditModal, setShowEditModal] = useState(false);
+	function openEditModal() {
+		setShowEditModal(true);
+	}
 	async function handleUpvoteButton() {
 		const data = await toggleUpVote(!isLiked, session.user.jwt, _id);
 		reLoadPostData();
@@ -44,6 +63,16 @@ export default function QuestionComponent(data) {
 	async function reLoadPostData() {
 		const res = await getPostDetail(session.user.jwt, _id);
 		setPostData(res);
+	}
+	function closeDeletePostModal() {
+		setShowDeletePostConfirmationModal(false);
+	}
+	async function handleDeletePost() {
+		closeDeletePostModal();
+		const data = await deletePost(session.user.jwt, _id);
+		if (data.message === "success") {
+			setReloadPosts(true);
+		}
 	}
 	useEffect(() => {
 		if (status === "authenticated") {
@@ -78,14 +107,14 @@ export default function QuestionComponent(data) {
 					</div>
 				))}
 			{status !== "loading" && !loading && (
-				<div className="bg-[#FFF] dark:bg-[#262626] border border-[#dee0e1] dark:border-[#262626] rounded p-3 flex flex-col gap-1">
-					<div className="flex gap-3">
+				<div className="bg-[#FFF] dark:bg-[#262626] rounded p-3 flex flex-col gap-1">
+					<div className="flex gap-3 items-center">
 						<Image
 							src={profileImage ?? userImg}
 							width={36}
 							height={36}
 							alt={`profile picture for ${name}`}
-							className="rounded-full object-cover"
+							className="rounded-full object-cover w-7 h-7 md:h-9 md:w-9"
 						/>
 						<div>
 							<div className="flex gap-2 items-center font-bold text-[13px]">
@@ -93,34 +122,90 @@ export default function QuestionComponent(data) {
 									{name}
 								</span>
 								<span className="bg-[#636466] w-[2px] h-[2px] rounded-full"></span>
+								<Link href={`/profile/${aid}`}>
+									<span className="text-[#2e69ff] hover:underline font-medium">
+										View Profile
+									</span>
+								</Link>
 							</div>
 							<div className="text-[13px] text-[#636466] dark:text-[#b1b3b6]">
 								{date.format("DD, MMMM YYYY")}
 							</div>
 						</div>
+						{session.user.id === aid && (
+							<div className="ml-auto flex gap-1 md:gap-2">
+								<button onClick={openEditModal}>
+									<div className="transition-all p-[6px] md:p-2 duration-200 text-[#636466] hover:bg-[#0000000d] rounded-full">
+										<MdEditNote className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" />
+									</div>
+								</button>
+								<EditPost
+									show={showEditModal}
+									setShow={setShowEditModal}
+									oldTitle={title}
+									oldContent={content}
+									postID={_id}
+								/>
+								<button
+									onClick={() =>
+										setShowDeletePostConfirmationModal(true)
+									}
+								>
+									<div className="transition-all p-2 duration-200 text-[#636466]	 hover:bg-[#0000000d] rounded-full">
+										<RiDeleteBinLine className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" />
+									</div>
+								</button>
+								<Modal
+									show={showDeletePostConfirmationModal}
+									close={closeDeletePostModal}
+								>
+									<div className="p-6 rounded-lg bg-white flex flex-col gap-3 items-center">
+										<div className="font-semibold text-[20px]">
+											Do you want to delete this post?
+										</div>
+										<div className="flex gap-2 w-full justify-end">
+											<button
+												onClick={closeDeletePostModal}
+												className="rounded-full border-2 px-4 py-2 font-medium text-[#636466] hover:bg-[#00000010] transition"
+											>
+												Cancel
+											</button>
+											<button
+												onClick={handleDeletePost}
+												className="rounded-full border-2 border-[#2e69ff] px-4 py-2 font-medium bg-[#2e69ff] hover:bg-[#1a5aff] text-[#fff] transition"
+											>
+												Confirm
+											</button>
+										</div>
+									</div>
+								</Modal>
+							</div>
+						)}
 					</div>
 					<div className="text-base font-bold">{title}</div>
 					<div className="text-[15px]">{content}</div>
-					<div className="relative max-w-[550px] max-h-[550px] bg-[#5f615f] dark:bg-[#5f615f]">
+					<div className="relative max-w-[550px] bg-[#5f615f] dark:bg-[#5f615f]">
 						{images.map((src, i) => {
 							return (
-								<Image
-									key={i}
-									src={src}
-									alt={title}
-									height={0}
-									width={0}
-									placeholder="blur"
-									blurDataURL={imgPlaceholder.src}
-									loading="lazy"
-									// fill
-									sizes="100vw"
-									className="object-contain z-0 w-full h-auto"
-								/>
+								<div className="relative max-h-[550px]" key={i}>
+									<Image
+										key={i}
+										src={src}
+										alt={title}
+										height={0}
+										width={0}
+										placeholder="blur"
+										blurDataURL={imgPlaceholder.src}
+										loading="lazy"
+										// fill
+										sizes="100vw"
+										className="object-contain z-0 w-full h-auto"
+									/>
+								</div>
 							);
 						})}
 					</div>
-					<div className="flex gap-2">
+					<div className="flex gap-2 mt-1">
 						<div className="flex rounded-full border dark:border-[#393839] bg-[#00000108] dark:bg-[#ffffff0d]">
 							<button
 								onClick={handleUpvoteButton}

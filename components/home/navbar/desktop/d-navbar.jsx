@@ -21,7 +21,7 @@ export default function DesktopNavbar() {
 	}
 	return (
 		<div className="mx-auto h-full w-fit md:flex items-center gap-1 hidden">
-			<Link href="./">
+			<Link href="/">
 				<Image
 					src={quoraLogo}
 					alt="Quora Logo"

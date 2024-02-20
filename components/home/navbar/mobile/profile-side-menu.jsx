@@ -9,6 +9,7 @@ import Modal from "@/components/common/modal";
 import { RxCross2 } from "react-icons/rx";
 import { THEMES } from "@/lib/utils";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 export default function ProfileSideMenu({
 	closeSideBar,
@@ -56,23 +57,28 @@ export default function ProfileSideMenu({
 								<RxCross2 size={24} />
 							</button>
 						</div>
-						<div className="py-5 px-3 pl-6 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-4">
-							<Image
-								src={userImg}
-								alt="Profile for User"
-								className="w-10 h-10 rounded-full"
-							/>
-							<div className="w-full flex justify-between items-center">
-								<p className="capitalize text-[20px] font-semibold">
-									{user.name}
-								</p>
-								<IoIosArrowForward
-									size={20}
-									// color="rgba(0,0,0,0.6)"
-									className="text-[#00000099] dark:text-[#d5d6d6]"
+						<Link
+							href={`/profile/${user.id}`}
+							onClick={closeSideBar}
+						>
+							<div className="py-5 px-3 pl-6 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-4">
+								<Image
+									src={userImg}
+									alt="Profile for User"
+									className="w-10 h-10 rounded-full"
 								/>
+								<div className="w-full flex justify-between items-center">
+									<p className="capitalize text-[20px] font-semibold">
+										{user.name}
+									</p>
+									<IoIosArrowForward
+										size={20}
+										// color="rgba(0,0,0,0.6)"
+										className="text-[#00000099] dark:text-[#d5d6d6]"
+									/>
+								</div>
 							</div>
-						</div>
+						</Link>
 						<div className="flex flex-col border-b  dark:border-[#393839]">
 							<div>
 								<button

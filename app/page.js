@@ -1,7 +1,7 @@
 "use client";
 import Advertisements from "@/components/home/advertisements/advertisements";
 import HeroSection from "@/components/home/hero-section/hero-section";
-import SpacesSidebar from "@/components/home/spaces/spaces-sidebar";
+import SpacesSidebar from "@/components/home/spaces-sidebar";
 import { useSession } from "next-auth/react";
 export default function Home() {
 	const { data: session, status } = useSession();

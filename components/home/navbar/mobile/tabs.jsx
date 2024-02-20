@@ -22,7 +22,7 @@ export default function MobileTabs() {
 				return (
 					<Link
 						key={path}
-						href={path}
+						href={`/${path}`}
 						className="flex-1 flex justify-center items-center border-r border-y border-[#dee0e1] dark:border-[#393839] h-11"
 					>
 						{`/${path}` === pathName && <ActiveIcon />}

@@ -9,6 +9,7 @@ import PostComponent from "./post-component";
 import QuestionComponent from "./question-components/question-component";
 import { useRouter } from "next/navigation";
 import usePageBottom from "@/components/custom-hooks/use-page-bottom";
+import { useDataContext } from "@/components/contexts/data-provider";
 export default function HeroSection() {
 	const { data: session, status } = useSession();
 	const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ export default function HeroSection() {
 	const [hasMoreResults, setHasMoreResults] = useState(true);
 	const router = useRouter();
 	const reachedBottom = usePageBottom();
+	const { reloadPosts, setReloadPosts } = useDataContext();
 	// console.log("reachedBottom", reachedBottom);
 	if (reachedBottom && hasMoreResults) {
 		if (!loadMorePosts) {
@@ -28,6 +30,17 @@ export default function HeroSection() {
 	function handleReload() {
 		router.refresh();
 	}
+	useEffect(() => {
+		if (reloadPosts && !loadMorePosts) {
+			async function reload() {
+				setReloadPosts(false);
+				setLoadMorePosts(true);
+				setPage(1);
+				setPosts([]);
+			}
+			reload();
+		}
+	}, [reloadPosts]);
 	async function loadPosts() {
 		setHasError(false);
 		try {
@@ -73,7 +86,14 @@ export default function HeroSection() {
 				<>
 					<PostComponent />
 					{posts.map((data, i) => {
-						return <QuestionComponent key={i} {...data} />;
+						return (
+							<div
+								key={i}
+								className="border border-[#dee0e1] dark:border-[#262626]"
+							>
+								<QuestionComponent {...data} />
+							</div>
+						);
 					})}
 				</>
 			)}

@@ -4,13 +4,19 @@ import { RxCross2 } from "react-icons/rx";
 import { FaRegImages } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useRef, useState } from "react";
-import { createAPost } from "@/lib/actions";
+import { editAPost } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useDataContext } from "../contexts/data-provider";
-export default function CreatePost({ show, setShow }) {
+export default function EditPost({
+	show,
+	setShow,
+	oldTitle,
+	oldContent,
+	postID,
+}) {
 	const [files, setFiles] = useState([]);
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
+	const [title, setTitle] = useState(oldTitle);
+	const [description, setDescription] = useState(oldContent);
 	const { data: session, status } = useSession();
 	const { setReloadPosts } = useDataContext();
 	const imagesInput = useRef();
@@ -25,7 +31,7 @@ export default function CreatePost({ show, setShow }) {
 	function closeModal() {
 		setShow(false);
 	}
-	async function addPost() {
+	async function editPost() {
 		const formData = new FormData();
 		formData.append("title", title);
 		setTitle("");
@@ -34,11 +40,13 @@ export default function CreatePost({ show, setShow }) {
 			setDescription("");
 		}
 		if (files.length > 0) {
-			for (let file of files) formData.append("images", file);
+			for (let file of files) {
+				formData.append("images", file);
+			}
 			setFiles([]);
 		}
 
-		const data = await createAPost(session.user.jwt, formData);
+		const data = await editAPost(session.user.jwt, formData, postID);
 		closeModal();
 		setReloadPosts(true);
 	}
@@ -54,18 +62,18 @@ export default function CreatePost({ show, setShow }) {
 					</button>
 					<button
 						disabled={title === "" || title.length < 2}
-						onClick={addPost}
+						onClick={editPost}
 						className="bg-[#2e69ff] hover:bg-[#1a5aff] disabled:opacity-35 disabled:hover:bg-[#2e69ff] text-white font-medium p-3 rounded-full transition duration-300"
 					>
-						Add Post
+						Save Post
 					</button>
 				</div>
 
 				<div className="text-[18px] font-semibold mx-auto text-center">
-					Create Post
+					Edit Post
 				</div>
 				<div className="w-full h-1 bg-[#2e69ff] rounded-t"></div>
-				<div className="p-3 w-full bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded-md text-[12px] sm:text-[15px]">
+				{/* <div className="p-3 w-full bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded-md text-[12px] sm:text-[15px]">
 					<div className="font-bold">
 						Tips on getting good answers quickly
 					</div>
@@ -76,7 +84,7 @@ export default function CreatePost({ show, setShow }) {
 						<li>Keep your question short and to the point</li>
 						<li>Double-check grammar and spelling</li>
 					</ul>
-				</div>
+				</div> */}
 				<div className="w-full px-5 flex justify-between items-center">
 					<div className="flex gap-3 items-center w-full">
 						<label className="relative cursor-pointer">
@@ -93,22 +101,46 @@ export default function CreatePost({ show, setShow }) {
 						<div className="flex gap-3 flex-wrap max-h-[100px] w-full overflow-y-scroll">
 							{files.length === 0 && <div>No Files Chosen</div>}
 							{files.length > 0 &&
-								files.map(({ name, lastModified }, index) => {
-									return (
-										<div
-											key={lastModified}
-											className="flex gap-1"
-										>
-											<div>{name}</div>
-											<button
-												onClick={() =>
-													handleRemoveFile(index)
-												}
+								files.map((item, index) => {
+									if (typeof item === "string") {
+										return (
+											<div
+												key={item}
+												className="flex gap-1"
 											>
-												<RiDeleteBin6Line />
-											</button>
-										</div>
-									);
+												<div>
+													{item.slice(
+														item.lastIndexOf("/") +
+															1
+													)}
+												</div>
+												<button
+													onClick={() =>
+														handleRemoveFile(index)
+													}
+												>
+													<RiDeleteBin6Line />
+												</button>
+											</div>
+										);
+									} else {
+										const { name, lastModified } = item;
+										return (
+											<div
+												key={lastModified}
+												className="flex gap-1"
+											>
+												<div>{name}</div>
+												<button
+													onClick={() =>
+														handleRemoveFile(index)
+													}
+												>
+													<RiDeleteBin6Line />
+												</button>
+											</div>
+										);
+									}
 								})}
 						</div>
 					</div>

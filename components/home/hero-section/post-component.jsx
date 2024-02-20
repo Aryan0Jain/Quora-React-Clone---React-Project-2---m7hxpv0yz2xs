@@ -16,7 +16,10 @@ export default function PostComponent() {
 					alt="Profile for User"
 					className="w-8 h-8 rounded-full"
 				/>
-				<div className="rounded-full border border-[#dee0e1] dark:border-[#393839] bg-[#f7f7f8] dark:bg-[#202020] text-[#939598] cursor-pointer flex-grow py-1 px-2 hover:bg-[#f1f2f2] transition duration-200">
+				<div
+					onClick={showCreatePost}
+					className="rounded-full border border-[#dee0e1] dark:border-[#393839] bg-[#f7f7f8] dark:bg-[#202020] text-[#939598] cursor-pointer flex-grow py-1 px-2 hover:bg-[#f1f2f2] transition duration-200"
+				>
 					What do you want to ask or share?
 				</div>
 			</div>

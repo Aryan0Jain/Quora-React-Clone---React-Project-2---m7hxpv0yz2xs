@@ -10,6 +10,7 @@ import { RxCross2 } from "react-icons/rx";
 import { THEMES } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import ClickAwayListener from "react-click-away-listener";
+import Link from "next/link";
 export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	const { data: session, status } = useSession();
 	let user;
@@ -34,31 +35,33 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	}
 	const menuClass =
 		(showMenu
-			? "scale-100 opacity-100 translate-y-0"
-			: "scale-0 opacity-0 -translate-y-8") +
+			? "scale-100 opacity-100 translate-y-2"
+			: "scale-0 opacity-0 -translate-y-0") +
 		" absolute -bottom-[300px] left-1/2 -translate-x-1/2 bg-white dark:bg-[#262626] transition-transform ease-in flex flex-col w-52 border border-[#dee0e1] dark:border-[#393839] rounded shadow-[0_1px_2px_rgba(0,0,0,.03),0_3px_8px_rgba(0,0,0,.05)]";
 	return (
 		status === "authenticated" && (
 			<ClickAwayListener onClickAway={closeMenu}>
 				<div className={menuClass}>
-					<div className="absolute rotate-45 border-t border-l dark:border-[#393839] w-3 h-3 bg-white dark:bg-[#262626] left-1/2 -translate-y-1/2 -translate-x-2"></div>
-					<div className="py-5 px-3 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-2">
-						<Image
-							src={userImg}
-							alt="Profile for User"
-							className="w-8 h-8 rounded-full"
-						/>
-						<div className="w-full flex justify-between items-center">
-							<p className="capitalize text-[20px] font-semibold">
-								{user.name}
-							</p>
-							<IoIosArrowForward
-								size={20}
-								// color="rgba(0,0,0,0.6)"
-								className="text-[#00000099] dark:text-[#d5d6d6]"
+					<div className="absolute rotate-45 border-t border-l dark:border-[#393839] w-3 h-3 bg-white dark:bg-[#262626] left-1/2 -translate-y-1/2 -translate-x-1 lg:translate-x-0"></div>
+					<Link href={`/profile/${user.id}`} onClick={closeMenu}>
+						<div className="py-5 px-3 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-2">
+							<Image
+								src={userImg}
+								alt="Profile for User"
+								className="w-8 h-8 rounded-full"
 							/>
+							<div className="w-full flex justify-between items-center">
+								<p className="capitalize text-[20px] font-semibold">
+									{user.name}
+								</p>
+								<IoIosArrowForward
+									size={20}
+									// color="rgba(0,0,0,0.6)"
+									className="text-[#00000099] dark:text-[#d5d6d6]"
+								/>
+							</div>
 						</div>
-					</div>
+					</Link>
 					<div className="flex flex-col border-b  dark:border-[#393839]">
 						<div>
 							<button

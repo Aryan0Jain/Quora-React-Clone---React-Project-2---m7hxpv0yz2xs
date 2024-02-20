@@ -3,13 +3,16 @@
 import Footer from "@/components/footer/footer";
 import { projectID } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
-
+import noChhanelImg from "@/assets/channel-no-profile.webp";
+import CreateSpace from "../spaces/create-space";
 export default function SpacesSidebar() {
 	const [loading, setLoading] = useState(true);
 	const [spaces, setSpaces] = useState([]);
 	const [hasError, setHasError] = useState(false);
+	const [showCreateSpace, setShowCreateSpace] = useState(false);
 	useEffect(() => {
 		async function getSpaces() {
 			setHasError(false);
@@ -47,7 +50,10 @@ export default function SpacesSidebar() {
 				})}
 			{!loading && !hasError && (
 				<>
-					<div className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer">
+					<div
+						onClick={()=>setShowCreateSpace(true)}
+						className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer transition hover:bg-[#e4e6e6]"
+					>
 						<div className="flex items-center gap-2 mx-auto w-fit">
 							<div className="bg-[#e6e7e8] dark:bg-[#262626] p-1 rounded">
 								<GoPlus
@@ -60,14 +66,16 @@ export default function SpacesSidebar() {
 							</div>
 						</div>
 					</div>
+					<CreateSpace show={showCreateSpace} setShow={setShowCreateSpace} />
 					{spaces.map(({ _id, name, image }) => {
 						return (
-							<div
+							<Link
+								href={`spaces/${_id}`}
 								key={_id}
-								className="flex gap-2 items-center p-2 hover:bg-[#E4E6E6] dark:hover:bg-[#1D1D1D] cursor-pointer transition duration-200"
+								className="flex gap-2 items-center p-2 hover:bg-[#E4E6E6] dark:hover:bg-[#1D1D1D] transition duration-200"
 							>
 								<Image
-									src={image}
+									src={image || noChhanelImg}
 									width={20}
 									height={20}
 									alt={name}
@@ -76,7 +84,7 @@ export default function SpacesSidebar() {
 								<div className="text-ellipsis overflow-hidden whitespace-nowrap w-24 text-[13px] text-[#636466] dark:text-[#b1b3b6]">
 									{name}
 								</div>
-							</div>
+							</Link>
 						);
 					})}
 					<Footer />
