@@ -8,5 +8,5 @@ export default function Following() {
 	useEffect(() => {
 		stopGlobalLoader();
 	}, []);
-	return <div>Following</div>;
+	return <div></div>;
 }

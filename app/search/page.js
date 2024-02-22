@@ -41,7 +41,58 @@ export default function Search({ searchParams }) {
 	}, [searchParams]);
 	return (
 		<>
-			{loading || (status === "loading" && <div>Loading</div>)}
+			{(loading || status === "loading") && (
+				<>
+					<div className="flex-grow flex flex-col bg-white dark:bg-[#262626] border dark:border-[#393839] animate-pulse">
+						<div className="p-3 border-b dark:border-[#393839] font-medium">
+							<div className="h-6 w-36 bg-slate-300 dark:bg-[#1b1b1b] rounded-3xl"></div>
+						</div>
+
+						<div className="m-3 border-b dark:border-[#393839] w-16 h-5 rounded-2xl bg-slate-300 dark:bg-[#1b1b1b]"></div>
+						{Array.from({ length: 5 }).map((_, i) => {
+							return (
+								<div
+									key={i}
+									className="bg-[#FFF] dark:bg-[#262626] rounded p-3 flex flex-col gap-1 border-b dark:border-[#393839]"
+								>
+									<div className="flex gap-3 items-center">
+										<div className="w-10 h-10 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+										<div className="flex flex-col gap-2">
+											<div className="flex gap-2 items-center font-bold text-[13px]">
+												<span className="w-[85px] h-4 rounded-lg bg-slate-300 dark:bg-[#1b1b1b]"></span>
+												<span className="bg-[#636466] w-[2px] h-[2px] rounded-full"></span>
+												<span className="w-[85px] h-4 rounded-lg bg-slate-300 dark:bg-[#1b1b1b]"></span>
+											</div>
+											<div className="w-24 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+										</div>
+									</div>
+									<div className="w-9/12 h-5 rounded-full my-1 bg-slate-300 dark:bg-[#1b1b1b]"></div>
+									<div className="w-full h-3 rounded-full my-1 bg-slate-300 dark:bg-[#1b1b1b]"></div>
+									<div className="w-full h-3 rounded-full my-1 bg-slate-300 dark:bg-[#1b1b1b]"></div>
+									<div className="w-8/12 h-3 rounded-full my-1 bg-slate-300 dark:bg-[#1b1b1b]"></div>
+								</div>
+							);
+						})}
+
+						<div className="m-3 border-b dark:border-[#393839] w-10 h-5 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+						{Array.from({ length: 5 }).map((_, i) => {
+							return (
+								<div
+									key={i}
+									className="flex gap-3 p-3 border-b dark:border-[#393839] hover:bg-[#f4f4f4] dark:hover:bg-[#ffffff0a] transition"
+								>
+									<div className="relative h-10 w-10 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+									<div className="flex flex-col gap-3">
+										<div className="w-40 h-5 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+										<div className="w-24 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+					<div className="hidden lg:block sticky w-[340px] h-[280px] rounded bg-white dark:bg-[#262626] animate-pulse"></div>
+				</>
+			)}
 			{!loading && status === "authenticated" && (
 				<>
 					<div className="flex-grow flex flex-col bg-white dark:bg-[#262626] border dark:border-[#393839]">

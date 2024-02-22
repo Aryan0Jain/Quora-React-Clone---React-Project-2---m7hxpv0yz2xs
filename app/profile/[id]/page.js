@@ -53,11 +53,8 @@ export default function Profile({ params }) {
 		gender,
 		isFollowed,
 		name,
-		paymentDetails,
-		phone,
 		profileImage,
 		skills,
-		updateAt,
 		workExperience,
 		_id,
 	} = userData;
@@ -82,7 +79,61 @@ export default function Profile({ params }) {
 	return (
 		<div className="pt-[88px] md:pt-14 h-screen w-full bg-white dark:bg-[#181818]">
 			<div className="w-full md:w-9/12 mx-auto mt-5">
-				{status === "loading" && loading && <div>Loading</div>}
+				{status === "loading" ||
+					(loading && (
+						<div className="flex flex-col">
+							<div className="flex flex-col md:flex-row gap-2">
+								<div className="flex gap-3 sm:gap-8 items-center flex-grow p-4 animate-pulse">
+									<div className="relative">
+										<div className="w-[120px] h-[120px] rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+									</div>
+									<div className="flex flex-col gap-2">
+										<div className="h-5 w-28 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+										<div className="h-5 w-24 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+										<div className="h-7 w-30 rounded-3xl bg-slate-300 dark:bg-[#3f3f3f]"></div>
+									</div>
+								</div>
+								<div className="flex flex-col gap-2 flex-grow animate-pulse">
+									<div className="border-b-2 dark:border-[#393839] pb-2 p-3 flex justify-between items-center">
+										<div className="bg-slate-300 dark:bg-[#3f3f3f] w-36 h-8 rounded-full"></div>
+										<div className="bg-slate-300 dark:bg-[#3f3f3f] w-12 h-5 rounded-lg"></div>
+									</div>
+									<div className="flex gap-2">
+										<div className="w-7 h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+										<div className="flex-grow h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+									</div>
+									<div className="flex gap-2">
+										<div className="w-7 h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+										<div className="flex-grow h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+									</div>
+									<div className="flex gap-2">
+										<div className="w-7 h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+										<div className="flex-grow h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+									</div>
+									<div className="flex gap-2">
+										<div className="w-7 h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+										<div className="flex-grow h-7 rounded-full bg-slate-300 dark:bg-[#3f3f3f]"></div>
+									</div>
+								</div>
+							</div>
+							<div className="w-full mx-auto flex gap-8 animate-pulse">
+								<div className="flex flex-col gap-3 mt-4 w-full md:w-[550px] mb-4">
+									<div className="ml-3 bg-slate-300 dark:bg-[#3f3f3f] w-14 h-7 rounded-2xl"></div>
+									{Array.from({ length: 5 }).map((_, i) => {
+										return (
+											<div
+												key={i}
+												className=" dark:border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.15)] bg-slate-300 dark:bg-[#3f3f3f] max-w-[550px] h-[350px]"
+											></div>
+										);
+									})}
+								</div>
+								<div className="hidden lg:block pt-4 mt-9 sticky top-[60px] w-80 h-72 bg-slate-300 dark:bg-[#3f3f3f] rounded">
+									{/* <Advertisements className="top-[72px]" /> */}
+								</div>
+							</div>
+						</div>
+					))}
 				{status === "authenticated" && !loading && (
 					<div className="flex flex-col">
 						<div className="flex flex-col md:flex-row gap-2">

@@ -57,7 +57,7 @@ export default function SpacesSidebar() {
 				<>
 					<div
 						onClick={() => setShowCreateSpace(true)}
-						className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer transition hover:bg-[#e4e6e6]"
+						className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer transition hover:bg-[#e4e6e6] dark:hover:bg-[#ffffff0b]"
 					>
 						<div className="flex items-center gap-2 mx-auto w-fit">
 							<div className="bg-[#e6e7e8] dark:bg-[#262626] p-1 rounded">

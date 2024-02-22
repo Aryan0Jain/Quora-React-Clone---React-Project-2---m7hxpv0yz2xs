@@ -40,11 +40,34 @@ export default function Spaces() {
 	return (
 		<div className="pt-[88px] md:pt-14 min-h-screen w-full pb-4">
 			<div className="w-full md:w-9/12 mx-auto flex gap-4">
-				{loading || (status === "loading" && <div>Loading</div>)}
+				{(loading || status === "loading") && (
+					<div className="w-full md:w-9/12 mx-auto flex flex-col gap-4">
+						<div className="pt-4 pb-4 px-4 bg-white dark:bg-[#262626] border dark:border-[#262626] rounded-sm flex flex-col items-start gap-3 md:mt-7 animate-pulse">
+							<div className="w-20 h-5 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+							<div className="w-4/6 h-5 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+							<div className="w-4/6 h-5 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+							<div className="w-4/6 h-5 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+						</div>
+						<div className="pt-4 pb-4 px-4 dark:border-[#262626] rounded-sm flex flex-col gap-5 md:mt-7">
+							<div className="w-32 h-5 bg-white dark:bg-[#262626] rounded-full animate-pulse"></div>
+							<div className="flex gap-3 flex-wrap justify-center">
+								{Array.from({ length: 20 }).map((_, i) => {
+									return (
+										<div
+											key={i}
+											className="rounded-2xl w-44 h-56 animate-pulse bg-white dark:bg-[#262626]"
+										></div>
+									);
+								})}
+							</div>
+						</div>
+					</div>
+				)}
+
 				{!loading && status === "authenticated" && (
 					<>
 						<div className="w-full md:w-9/12 mx-auto flex flex-col gap-4">
-							<div className="pt-4 bg-white dark:bg-[#262626] border dark:border-[#262626] rounded-sm flex flex-col items-start gap-2 md:mt-7">
+							<div className="pt-4 pb-4 bg-white dark:bg-[#262626] border dark:border-[#262626] rounded-sm flex flex-col items-start gap-2 md:mt-7">
 								<div className="font-bold text-[18px] px-4">
 									Your Spaces
 								</div>

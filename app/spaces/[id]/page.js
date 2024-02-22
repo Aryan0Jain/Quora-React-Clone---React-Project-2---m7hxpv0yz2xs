@@ -66,9 +66,49 @@ export default function Page({ params }) {
 
 	return (
 		<>
-			{status === "loading" && loading && (
-				<div className="pt-[88px] md:pt-12 h-screen w-full bg-white">
-					Loading
+			{(status === "loading" || loading) && (
+				<div className="pt-[88px] md:pt-12 min-h-screen w-full bg-white dark:bg-[#181818]">
+					<div className="w-full sm:w-10/12 pt-14 pb-5 sm:mx-auto bg-[#f2f2f2] dark:bg-[#262626] rounded-b-2xl animate-pulse">
+						<div className="w-28 h-28 rounded-lg ml-6 bg-slate-300 dark:bg-[#1b1b1b]"></div>
+						<div className="w-4/12 h-5 mt-5 ml-4 rounded-lg bg-slate-300 dark:bg-[#1b1b1b]"></div>
+						<div className="w-7/12 h-5 mt-5 ml-4 rounded-lg bg-slate-300 dark:bg-[#1b1b1b]"></div>
+					</div>
+					<div className="w-full sm:w-10/12 flex gap-6 mx-auto my-5">
+						<div className="flex flex-col flex-grow max-w-[550px] gap-3">
+							{Array.from({ length: 10 }).map((_, i) => {
+								return (
+									<div
+										key={i}
+										className="bg-[#FFF] dark:bg-[#262626] animate-pulse border border-[#dee0e1] dark:border-[#262626] rounded"
+									>
+										<div className="h-11 flex px-2 gap-2 items-center">
+											<div className="h-9 w-9 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="flex flex-col gap-2 h-full w-full py-2">
+												<div className="flex-grow w-1/4 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+												<div className="flex-grow w-10/12 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+											</div>
+										</div>
+										<div className="h-44 flex flex-col px-2 gap-2 py-3">
+											<div className="h-5 w-9/12 bg-slate-300 dark:bg-[#1b1b1b] rounded-full"></div>
+											<div className="flex flex-col py-2 px-3 justify-between h-full">
+												{Array.from({ length: 6 }).map(
+													(_, i) => {
+														return (
+															<div
+																key={i}
+																className="h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"
+															></div>
+														);
+													}
+												)}
+											</div>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+						<div className="hidden md:block sticky top-[70px] w-[340px] h-[280px] bg-[#f2f2f2] dark:bg-[#262626] rounded-2xl"></div>
+					</div>
 				</div>
 			)}
 			{status === "authenticated" && !loading && (

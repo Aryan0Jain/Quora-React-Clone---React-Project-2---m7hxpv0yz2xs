@@ -1,3 +1,4 @@
+import { userLogin } from "@/lib/actions";
 import { projectID } from "@/lib/utils";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -39,32 +40,37 @@ const handler = NextAuth({
 					password: password,
 					appType: "quora",
 				};
-				try {
-					const data = await fetch(
-						"https://academics.newtonschool.co/api/v1/user/login",
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-								projectID: projectID,
-							},
-							body: JSON.stringify(body),
-						}
-					);
-					const res = await data.json();
-					if (
-						res.message &&
-						res.message === "Incorrect EmailId or Password"
-					) {
-						return null;
-					}
-					return res;
-				} catch (error) {
+				const res = await userLogin(body);
+				if (res.message && res.message === "fail") {
 					return null;
-					return {
-						mesaage: "Some Error Occured. Please try again later.",
-					};
 				}
+				return res;
+				// try {
+				// 	const data = await fetch(
+				// 		"https://academics.newtonschool.co/api/v1/user/login",
+				// 		{
+				// 			method: "POST",
+				// 			headers: {
+				// 				"Content-Type": "application/json",
+				// 				projectID: projectID,
+				// 			},
+				// 			body: JSON.stringify(body),
+				// 		}
+				// 	);
+				// 	const res = await data.json();
+				// 	if (
+				// 		res.message &&
+				// 		res.message === "Incorrect EmailId or Password"
+				// 	) {
+				// 		return null;
+				// 	}
+				// 	return res;
+				// } catch (error) {
+				// 	return null;
+				// 	return {
+				// 		mesaage: "Some Error Occured. Please try again later.",
+				// 	};
+				// }
 			},
 		}),
 	],

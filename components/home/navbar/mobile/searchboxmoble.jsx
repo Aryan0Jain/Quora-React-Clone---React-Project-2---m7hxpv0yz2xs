@@ -9,6 +9,7 @@ import ClickAwayListener from "react-click-away-listener";
 import { FiSearch } from "react-icons/fi";
 import Image from "next/image";
 import { IoIosArrowBack } from "react-icons/io";
+import { useDataContext } from "@/components/contexts/data-provider";
 export default function SearchBoxMobile({ close }) {
 	const inputRef = useRef();
 	const containerRef = useRef();
@@ -20,6 +21,7 @@ export default function SearchBoxMobile({ close }) {
 	const [resultsDropDown, setResultsDropDown] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
+	const { startGlobalLoader } = useDataContext();
 	function openDropDown() {
 		setResultsDropDown(true);
 	}
@@ -60,6 +62,7 @@ export default function SearchBoxMobile({ close }) {
 		e.stopPropagation();
 		inputRef.current.blur();
 		closeDropDown();
+		startGlobalLoader();
 		router.push(`/search?q=${encodeURI(query)}`);
 	}
 	function handleQueryChange(e) {
@@ -80,6 +83,7 @@ export default function SearchBoxMobile({ close }) {
 		e.stopPropagation();
 		inputRef.current.blur();
 		closeDropDown();
+		startGlobalLoader();
 	}
 	useEffect(() => {
 		const id = setTimeout(() => {

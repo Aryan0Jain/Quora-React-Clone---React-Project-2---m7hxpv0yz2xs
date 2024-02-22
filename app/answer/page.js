@@ -3,21 +3,10 @@
 import { useDataContext } from "@/components/contexts/data-provider";
 import { useEffect } from "react";
 
-export default function Answer() {
+export default function Following() {
 	const { stopGlobalLoader } = useDataContext();
 	useEffect(() => {
 		stopGlobalLoader();
 	}, []);
-	return (
-		<div>
-			<div>adasds</div>
-			<div>adasds</div>
-			<div>adasds</div>
-			<div>adasds</div>
-			<div>adasds</div>
-			<div>adasds</div>
-			<div>adasds</div>
-			<div>adasds</div>
-		</div>
-	);
+	return <div></div>;
 }
