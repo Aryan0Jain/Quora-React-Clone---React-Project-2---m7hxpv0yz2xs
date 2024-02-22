@@ -1,6 +1,11 @@
-export default function Advertisements() {
+export default function Advertisements({ className }) {
 	return (
-		<div className="sticky top-[72px] flex flex-col gap-4">
+		<div
+			className={
+				className +
+				" sticky flex flex-col gap-4 w-[340px] pt-2 border bg-[#f7f7f8] dark:bg-[#202020] dark:border-[#262626]"
+			}
+		>
 			<iframe
 				data-creative-load-listener=""
 				id="200_278_express_html_inpage_0.if"
@@ -9,6 +14,7 @@ export default function Advertisements() {
 				height="250"
 				allowFullScreen={true}
 				style={{ width: 300, height: 250 }}
+				className="mx-[20px]"
 			></iframe>
 			<iframe
 				data-creative-load-listener=""
@@ -18,7 +24,11 @@ export default function Advertisements() {
 				height="250"
 				allowFullScreen={true}
 				style={{ width: 300, height: 250 }}
+				className="mx-[20px]"
 			></iframe>
+			<div className="w-[340px] text-center py-2 text-xs text-[#939598] dark:text-[#8e9092] border dark:border-[#393839] dark:bg-[#262626]">
+				Advertisements
+			</div>
 		</div>
 	);
 }

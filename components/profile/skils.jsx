@@ -14,7 +14,7 @@ export default function Skills({
 		<>
 			{workExperience?.[0] && (
 				<div className="flex gap-2 items-center px-2">
-					<div className="rounded-full p-2 bg-[#f1f2f2] text-[#636466]">
+					<div className="rounded-full p-2 bg-[#f1f2f2] dark:bg-transparent text-[#636466] dark:text-[#b1b3b6]">
 						<FaBriefcase size={14} />
 					</div>
 					<p>
@@ -39,7 +39,7 @@ export default function Skills({
 			)}
 			{education.length > 0 && (
 				<div className="flex gap-2 items-center px-2">
-					<div className="rounded-full p-2 bg-[#f1f2f2] text-[#636466]">
+					<div className="rounded-full p-2 bg-[#f1f2f2] dark:bg-transparent text-[#636466] dark:text-[#b1b3b6]">
 						<FaGraduationCap size={14} />
 					</div>
 					<p>
@@ -58,7 +58,7 @@ export default function Skills({
 			)}
 			{address.length > 0 && (
 				<div className="flex gap-2 items-center px-2">
-					<div className="rounded-full p-2 bg-[#f1f2f2] text-[#636466]">
+					<div className="rounded-full p-2 bg-[#f1f2f2] dark:bg-transparent text-[#636466] dark:text-[#b1b3b6]">
 						<FaLocationDot size={14} />
 					</div>
 					<div>
@@ -68,7 +68,7 @@ export default function Skills({
 				</div>
 			)}
 			<div className="flex gap-2 items-center px-2">
-				<div className="rounded-full p-2 bg-[#f1f2f2] text-[#636466]">
+				<div className="rounded-full p-2 bg-[#f1f2f2] dark:bg-transparent text-[#636466] dark:text-[#b1b3b6]">
 					<FaCalendar size={14} />
 				</div>
 				<div>Joined {new dayjs(createdAt).format("MMMM YYYY")}</div>

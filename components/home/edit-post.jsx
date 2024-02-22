@@ -13,6 +13,7 @@ export default function EditPost({
 	oldTitle,
 	oldContent,
 	postID,
+	images,
 }) {
 	const [files, setFiles] = useState([]);
 	const [title, setTitle] = useState(oldTitle);
@@ -20,6 +21,7 @@ export default function EditPost({
 	const { data: session, status } = useSession();
 	const { setReloadPosts } = useDataContext();
 	const imagesInput = useRef();
+
 	function filesBtnHandler(e) {
 		setFiles([...e.target.files]);
 	}
@@ -73,18 +75,7 @@ export default function EditPost({
 					Edit Post
 				</div>
 				<div className="w-full h-1 bg-[#2e69ff] rounded-t"></div>
-				{/* <div className="p-3 w-full bg-[#ebf0ff] dark:bg-[#282d41] text-[#2e69ff] dark:text-[#4894fd] rounded-md text-[12px] sm:text-[15px]">
-					<div className="font-bold">
-						Tips on getting good answers quickly
-					</div>
-					<ul className="list-disc list-inside">
-						<li>
-							Make sure your question has not been asked already
-						</li>
-						<li>Keep your question short and to the point</li>
-						<li>Double-check grammar and spelling</li>
-					</ul>
-				</div> */}
+
 				<div className="w-full px-5 flex justify-between items-center">
 					<div className="flex gap-3 items-center w-full">
 						<label className="relative cursor-pointer">

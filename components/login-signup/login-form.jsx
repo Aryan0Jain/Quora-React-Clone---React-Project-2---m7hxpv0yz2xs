@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { isValidEmail } from "@/lib/utils";
 import ErrorBox from "./error-box";
 import { useRouter } from "next/navigation";
+import { useDataContext } from "../contexts/data-provider";
 const label = "text-[13px] font-bold w-fit mb-2";
 const input =
 	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[#2d69ff99] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors dark:bg-[#181818] dark:border-[#393839]";
@@ -17,9 +18,11 @@ export default function LoginForm() {
 	const [loginFail, setLoginFail] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const { startGlobalLoader, stopGlobalLoader } = useDataContext();
 	const router = useRouter();
 	async function handleLogin(e) {
 		setLoading(true);
+		startGlobalLoader();
 		e.preventDefault();
 		const res = await signIn("credentials", {
 			redirect: false,
@@ -41,26 +44,7 @@ export default function LoginForm() {
 				"OOPS! Some error occured. Please try again later."
 			);
 		}
-		// const res = await fetch("/api/login", {
-		// 	method: "POST",
-		// 	headers: { "Content-Type": "application/json" },
-		// 	body: JSON.stringify({
-		// 		email: email,
-		// 		password: password,
-		// 	}),
-		// });
-		// const data = await res.json();
-		// console.log(data);
-		// if (data.message !== "") {
-		// 	setLoginFail(true);
-		// 	setErrorMessage(data.message);
-		// } else {
-		// 	const userdetails = {
-		// 		name: data.data.name,
-		// 		email: data.data.email,
-		// 		token: data.token,
-		// 	};
-		// }
+		stopGlobalLoader();
 		setLoading(false);
 	}
 	useEffect(() => {

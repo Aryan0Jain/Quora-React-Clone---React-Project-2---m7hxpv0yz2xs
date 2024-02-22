@@ -1,11 +1,17 @@
 "use client";
+import { useDataContext } from "@/components/contexts/data-provider";
 import Advertisements from "@/components/home/advertisements/advertisements";
 import HeroSection from "@/components/home/hero-section/hero-section";
 import SpacesSidebar from "@/components/home/spaces-sidebar";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 export default function Home() {
 	const { data: session, status } = useSession();
 	// console.log(session);
+	const { stopGlobalLoader } = useDataContext();
+	useEffect(() => {
+		stopGlobalLoader();
+	}, []);
 	return (
 		<div className="min-h-screen w-full md:w-10/12 mx-auto pt-[88px] md:pt-14">
 			<div className="flex gap-5 justify-center">
@@ -15,7 +21,7 @@ export default function Home() {
 				</div>
 				<HeroSection />
 				<div className="hidden lg:block pt-4">
-					<Advertisements />
+					<Advertisements className="top-[72px]" />
 				</div>
 			</div>
 		</div>

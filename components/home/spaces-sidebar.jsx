@@ -8,11 +8,16 @@ import { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
 import noChhanelImg from "@/assets/channel-no-profile.webp";
 import CreateSpace from "../spaces/create-space";
+import { useDataContext } from "../contexts/data-provider";
 export default function SpacesSidebar() {
 	const [loading, setLoading] = useState(true);
 	const [spaces, setSpaces] = useState([]);
 	const [hasError, setHasError] = useState(false);
 	const [showCreateSpace, setShowCreateSpace] = useState(false);
+	const { startGlobalLoader } = useDataContext();
+	function handleLinkClick() {
+		startGlobalLoader();
+	}
 	useEffect(() => {
 		async function getSpaces() {
 			setHasError(false);
@@ -51,7 +56,7 @@ export default function SpacesSidebar() {
 			{!loading && !hasError && (
 				<>
 					<div
-						onClick={()=>setShowCreateSpace(true)}
+						onClick={() => setShowCreateSpace(true)}
 						className="p-2 bg-[#eceded] dark:bg-[#1b1b1b] rounded flex items-center cursor-pointer transition hover:bg-[#e4e6e6]"
 					>
 						<div className="flex items-center gap-2 mx-auto w-fit">
@@ -66,27 +71,33 @@ export default function SpacesSidebar() {
 							</div>
 						</div>
 					</div>
-					<CreateSpace show={showCreateSpace} setShow={setShowCreateSpace} />
-					{spaces.map(({ _id, name, image }) => {
-						return (
-							<Link
-								href={`spaces/${_id}`}
-								key={_id}
-								className="flex gap-2 items-center p-2 hover:bg-[#E4E6E6] dark:hover:bg-[#1D1D1D] transition duration-200"
-							>
-								<Image
-									src={image || noChhanelImg}
-									width={20}
-									height={20}
-									alt={name}
-									className="rounded"
-								/>
-								<div className="text-ellipsis overflow-hidden whitespace-nowrap w-24 text-[13px] text-[#636466] dark:text-[#b1b3b6]">
-									{name}
-								</div>
-							</Link>
-						);
-					})}
+					<CreateSpace
+						show={showCreateSpace}
+						setShow={setShowCreateSpace}
+					/>
+					<div className="border-b pb-2 dark:border-[#393839]">
+						{spaces.map(({ _id, name, image }) => {
+							return (
+								<Link
+									href={`spaces/${_id}`}
+									key={_id}
+									className="flex gap-2 items-center p-2 hover:bg-[#E4E6E6] dark:hover:bg-[#1D1D1D] transition duration-200"
+									onClick={handleLinkClick}
+								>
+									<Image
+										src={image || noChhanelImg}
+										width={20}
+										height={20}
+										alt={name}
+										className="rounded"
+									/>
+									<div className="text-ellipsis overflow-hidden whitespace-nowrap w-24 text-[13px] text-[#636466] dark:text-[#b1b3b6]">
+										{name}
+									</div>
+								</Link>
+							);
+						})}
+					</div>
 					<Footer />
 				</>
 			)}

@@ -19,14 +19,14 @@ export default function DeleteSpace({
 	}
 	return (
 		<Modal show={showDeleteSpaceModal} close={closeDeleteSpaceModal}>
-			<div className="p-6 rounded-lg bg-white flex flex-col gap-3 items-center">
+			<div className="p-6 rounded-lg bg-white dark:bg-[#181818] flex flex-col gap-3 items-center">
 				<div className="font-semibold text-[20px]">
 					Do you want to delete this space?
 				</div>
 				<div className="flex gap-2 w-full justify-end">
 					<button
 						onClick={closeDeleteSpaceModal}
-						className="rounded-full border-2 px-4 py-2 font-medium text-[#636466] hover:bg-[#00000010] transition"
+						className="rounded-full border-2 dark:border-[#262626] px-4 py-2 font-medium text-[#636466] dark:text-[#e2e2e2] hover:bg-[#00000010] dark:hover:bg-[#00000050] transition"
 					>
 						Cancel
 					</button>

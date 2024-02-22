@@ -13,6 +13,8 @@ import { MdEditNote } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import EditSpace from "@/components/spaces/edit-space";
 import DeleteSpace from "@/components/spaces/delete-space";
+import Advertisements from "@/components/home/advertisements/advertisements";
+import { useDataContext } from "@/components/contexts/data-provider";
 export default function Page({ params }) {
 	const [channelData, setChannelData] = useState({});
 	const [posts, setPosts] = useState([]);
@@ -21,6 +23,7 @@ export default function Page({ params }) {
 	const [coverIndex] = useState(Math.floor(Math.random() * 5));
 	const [showEditBox, setShowEditBox] = useState(false);
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+	const { stopGlobalLoader, startGlobalLoader } = useDataContext();
 	function openDeleteConfirmation() {
 		setShowDeleteConfirmation(true);
 	}
@@ -29,6 +32,9 @@ export default function Page({ params }) {
 	}
 	function openEditModal() {
 		setShowEditBox(true);
+	}
+	function handleLinkClick() {
+		startGlobalLoader();
 	}
 	async function fetchChannel() {
 		const data = await getChannelData(params.id);
@@ -44,6 +50,9 @@ export default function Page({ params }) {
 		}
 	}
 	useEffect(() => {
+		stopGlobalLoader();
+	}, []);
+	useEffect(() => {
 		async function load() {
 			if (status === "authenticated" && loading) {
 				await fetchChannel();
@@ -58,12 +67,12 @@ export default function Page({ params }) {
 	return (
 		<>
 			{status === "loading" && loading && (
-				<div className="pt-[88px] md:pt-14 h-screen w-full bg-white">
+				<div className="pt-[88px] md:pt-12 h-screen w-full bg-white">
 					Loading
 				</div>
 			)}
 			{status === "authenticated" && !loading && (
-				<div className="pt-[88px] md:pt-14 min-h-screen w-full bg-white pb-4">
+				<div className="pt-[88px] md:pt-12 min-h-screen w-full bg-white dark:bg-[#181818] pb-4">
 					<div
 						className="w-full bg-no-repeat bg-cover "
 						style={{
@@ -82,6 +91,7 @@ export default function Page({ params }) {
 										src={image || noChhanelImg}
 										alt={`Profile Picture for ${name}`}
 										fill
+										sizes="80px"
 										className=" rounded-[30px]"
 									/>
 								</div>
@@ -89,11 +99,11 @@ export default function Page({ params }) {
 
 							<div className="px-5 flex flex-col gap-2 mt-12 md:mt-14">
 								<div className="flex w-full justify-between">
-									<Link href={""}>
-										<div className="text-white font-bold text-[18px] md:text-[27px]">
-											{name}
-										</div>
-									</Link>
+									{/* <Link href={""} onClick={handleLinkClick}> */}
+									<div className="text-white font-bold text-[18px] md:text-[27px]">
+										{name}
+									</div>
+									{/* </Link> */}
 									{owner._id === session.user.id && (
 										<div className="flex gap-4">
 											<button onClick={openEditModal}>
@@ -123,7 +133,7 @@ export default function Page({ params }) {
 												showDeleteSpaceModal={
 													showDeleteConfirmation
 												}
-                                                channelID={params.id}
+												channelID={params.id}
 											/>
 										</div>
 									)}
@@ -136,6 +146,7 @@ export default function Page({ params }) {
 									<Link
 										href={`/profile/${owner._id}`}
 										className="capitalize font-semibold hover:underline"
+										onClick={handleLinkClick}
 									>
 										{owner.name}
 									</Link>{" "}
@@ -145,43 +156,50 @@ export default function Page({ params }) {
 							</div>
 						</div>
 					</div>
-					<div className="flex flex-col gap-3 mt-4 w-full md:w-[550px] mb-4 mx-auto">
-						{/* <div className="text-xl font-semibold ml-3">Posts</div> */}
-						{posts.length > 0 &&
-							posts.map((data, i) => {
-								return (
-									<div
-										key={i}
-										className=" dark:border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.15)]"
-									>
-										<QuestionComponent {...data} />
-									</div>
-								);
-							})}
-						{!posts ||
-							(posts.length === 0 && (
-								<div className="flex flex-col items-center gap-3">
-									<div className="relative w-28 h-28">
-										<Image
-											src={noPosts}
-											alt="no posts found"
-											fill
-										/>
-									</div>
-									<div className="mx-4 text-center text-[#636466] font-bold text-[18px]">
-										No stories
-									</div>
-									<div className="mx-4 text-center text-[#636466]">
-										There are no stories in this Space yet.
-									</div>
-									{/* <Link
+					<div className="w-full md:w-9/12 flex gap-8 justify-center mx-auto items-start">
+						<div className="flex flex-col gap-3 mt-4 w-full md:w-[550px] mb-4 mx-auto">
+							{/* <div className="text-xl font-semibold ml-3">Posts</div> */}
+							{posts.length > 0 &&
+								posts.map((data, i) => {
+									return (
+										<div
+											key={i}
+											className=" dark:border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.15)]"
+										>
+											<QuestionComponent {...data} />
+										</div>
+									);
+								})}
+							{!posts ||
+								(posts.length === 0 && (
+									<div className="flex flex-col items-center gap-3">
+										<div className="relative w-28 h-28">
+											<Image
+												src={noPosts}
+												alt="no posts found"
+												fill
+												sizes="112px"
+											/>
+										</div>
+										<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6] font-bold text-[18px]">
+											No stories
+										</div>
+										<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
+											There are no stories in this Space
+											yet.
+										</div>
+										{/* <Link
 										href={"/answer"}
 										className="px-3 py-2 rounded-full text-white bg-[#2e69ff] hover:bg-[#1a5aff] transition"
 									>
 										Answer questions
 									</Link> */}
-								</div>
-							))}
+									</div>
+								))}
+						</div>
+						<div className="hidden lg:block pt-4 sticky top-[60px]">
+							<Advertisements className="top-[72px]" />
+						</div>
 					</div>
 				</div>
 			)}

@@ -6,5 +6,8 @@ export const config = {
 		"/answer/:path*",
 		"/spaces/:path*",
 		"/notifications/:path*",
+		"/profile/:path*",
+		"/posts/:path*",
+		"/search/:path*",
 	],
 };

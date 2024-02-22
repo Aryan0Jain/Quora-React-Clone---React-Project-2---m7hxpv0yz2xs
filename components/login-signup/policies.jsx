@@ -1,10 +1,14 @@
 "use client";
-import { useState } from "react";
-import classes from "./policies.module.css";
+import { useEffect, useState } from "react";
 import Signup from "./signup";
+import { useDataContext } from "../contexts/data-provider";
 export default function Policies() {
 	const [showSignUp, setShowSignUp] = useState(false);
 	const [readToLogin, setReadyToLogIn] = useState(false);
+	const { stopGlobalLoader } = useDataContext();
+	useEffect(() => {
+		stopGlobalLoader();
+	}, []);
 	return (
 		<div className="w-full flex flex-col gap-7 sm:px-6 px-4 pb-4 border-r border-[#dee0e1] dark:border-[#393839]">
 			<div className="text-[#939598] text-[12px] sm:text-[13px]">

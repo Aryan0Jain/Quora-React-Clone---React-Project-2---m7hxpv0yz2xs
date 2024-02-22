@@ -11,7 +11,9 @@ import imgPlaceholder from "@/assets/image-placeholder.jpg";
 import { useDataContext } from "@/components/contexts/data-provider";
 import {
 	deletePost,
+	getComments,
 	getPostDetail,
+	postComment,
 	toggleDownVote,
 	toggleUpVote,
 } from "@/lib/actions";
@@ -20,6 +22,7 @@ import { MdEditNote } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import Modal from "@/components/common/modal";
 import EditPost from "../../edit-post";
+import Comment from "./comment";
 
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
@@ -39,18 +42,33 @@ export default function QuestionComponent(data) {
 		isLiked,
 		channel,
 	} = postData;
-	// console.log(postData);
 	const date = new dayjs(createdAt);
 	const { name = "John Doe", profileImage, _id: aid } = author;
 	const [loading, setLoading] = useState(true);
-	const { setDisplayMessageBox, setReloadPosts } = useDataContext();
+	const { setDisplayMessageBox, setReloadPosts, startGlobalLoader } =
+		useDataContext();
 	const [
 		showDeletePostConfirmationModal,
 		setShowDeletePostConfirmationModal,
 	] = useState(false);
 	const [showEditModal, setShowEditModal] = useState(false);
+	const [showCommentSection, setShowCommentSection] = useState(false);
+	const [loadingComments, setLoadingComments] = useState(false);
+	const [comments, setComments] = useState([]);
+	const [comment, setComment] = useState("");
 	function openEditModal() {
 		setShowEditModal(true);
+	}
+	function toggleComments() {
+		if (showCommentSection) {
+			setShowCommentSection(false);
+		} else {
+			setLoadingComments(true);
+			setShowCommentSection(true);
+		}
+	}
+	function handleLinkClick() {
+		startGlobalLoader();
 	}
 	async function handleUpvoteButton() {
 		const data = await toggleUpVote(!isLiked, session.user.jwt, _id);
@@ -62,7 +80,7 @@ export default function QuestionComponent(data) {
 	}
 	async function reLoadPostData() {
 		const res = await getPostDetail(session.user.jwt, _id);
-		setPostData(res);
+		if (res.message === "success") setPostData(res.data);
 	}
 	function closeDeletePostModal() {
 		setShowDeletePostConfirmationModal(false);
@@ -74,11 +92,37 @@ export default function QuestionComponent(data) {
 			setReloadPosts(true);
 		}
 	}
+	async function fetchComments() {
+		const data = await getComments(session.user.jwt, _id);
+		if (data.message === "success") {
+			setComments(data.data);
+		}
+		setLoadingComments(false);
+	}
+	async function handleAddComment(e) {
+		e.preventDefault();
+		if (comment.trim().length > 0) {
+			const data = await postComment(
+				session.user.jwt,
+				_id,
+				comment.trim()
+			);
+			if (data.message === "success") {
+				setComment("");
+				setLoadingComments(true);
+			}
+		}
+	}
 	useEffect(() => {
 		if (status === "authenticated") {
 			setLoading(false);
 		}
 	}, [status]);
+	useEffect(() => {
+		if (loadingComments) {
+			fetchComments();
+		}
+	}, [loadingComments]);
 	return (
 		<>
 			{status === "loading" ||
@@ -122,20 +166,25 @@ export default function QuestionComponent(data) {
 									{name}
 								</span>
 								<span className="bg-[#636466] w-[2px] h-[2px] rounded-full"></span>
-								<Link href={`/profile/${aid}`}>
+								<Link
+									href={`/profile/${aid}`}
+									onClick={handleLinkClick}
+								>
 									<span className="text-[#2e69ff] hover:underline font-medium">
 										View Profile
 									</span>
 								</Link>
 							</div>
-							<div className="text-[13px] text-[#636466] dark:text-[#b1b3b6]">
-								{date.format("DD, MMMM YYYY")}
-							</div>
+							{createdAt && (
+								<div className="text-[13px] text-[#636466] dark:text-[#b1b3b6]">
+									{date.format("DD, MMMM YYYY")}
+								</div>
+							)}
 						</div>
 						{session.user.id === aid && (
 							<div className="ml-auto flex gap-1 md:gap-2">
 								<button onClick={openEditModal}>
-									<div className="transition-all p-[6px] md:p-2 duration-200 text-[#636466] hover:bg-[#0000000d] rounded-full">
+									<div className="transition-all p-2 duration-200 text-[#636466] dark:text-[#e2e2e2] hover:bg-[#0000000d] dark:hover:bg-[#00000052] rounded-full">
 										<MdEditNote className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" />
 									</div>
 								</button>
@@ -145,13 +194,14 @@ export default function QuestionComponent(data) {
 									oldTitle={title}
 									oldContent={content}
 									postID={_id}
+									images={images}
 								/>
 								<button
 									onClick={() =>
 										setShowDeletePostConfirmationModal(true)
 									}
 								>
-									<div className="transition-all p-2 duration-200 text-[#636466]	 hover:bg-[#0000000d] rounded-full">
+									<div className="transition-all p-2 duration-200 text-[#636466] dark:text-[#e2e2e2] hover:bg-[#0000000d] dark:hover:bg-[#00000052] rounded-full">
 										<RiDeleteBinLine className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" />
 									</div>
 								</button>
@@ -159,14 +209,14 @@ export default function QuestionComponent(data) {
 									show={showDeletePostConfirmationModal}
 									close={closeDeletePostModal}
 								>
-									<div className="p-6 rounded-lg bg-white flex flex-col gap-3 items-center">
+									<div className="p-6 rounded-lg bg-white dark:bg-[#181818] flex flex-col gap-3 items-center">
 										<div className="font-semibold text-[20px]">
 											Do you want to delete this post?
 										</div>
 										<div className="flex gap-2 w-full justify-end">
 											<button
 												onClick={closeDeletePostModal}
-												className="rounded-full border-2 px-4 py-2 font-medium text-[#636466] hover:bg-[#00000010] transition"
+												className="rounded-full border-2 dark:border-[#262626] px-4 py-2 font-medium text-[#636466] dark:text-[#e2e2e2] hover:bg-[#00000010] dark:hover:bg-[#00000050] transition"
 											>
 												Cancel
 											</button>
@@ -182,7 +232,15 @@ export default function QuestionComponent(data) {
 							</div>
 						)}
 					</div>
-					<div className="text-base font-bold">{title}</div>
+					<Link
+						href={`/posts/${_id}`}
+						className="w-fit"
+						onClick={handleLinkClick}
+					>
+						<div className="text-base font-bold hover:underline underline-offset-1">
+							{title}
+						</div>
+					</Link>
 					<div className="text-[15px]">{content}</div>
 					<div className="relative max-w-[550px] bg-[#5f615f] dark:bg-[#5f615f]">
 						{images.map((src, i) => {
@@ -198,7 +256,7 @@ export default function QuestionComponent(data) {
 										blurDataURL={imgPlaceholder.src}
 										loading="lazy"
 										// fill
-										sizes="100vw"
+										sizes="500px"
 										className="object-contain z-0 w-full h-auto"
 									/>
 								</div>
@@ -254,7 +312,10 @@ export default function QuestionComponent(data) {
 								</span>
 							</button>
 						</div>
-						<button className="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a]">
+						<button
+							onClick={toggleComments}
+							className="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a]"
+						>
 							<CommentIcon
 								className={
 									"w-5 h-5 stroke-[#636466] dark:stroke-[#b1b3b6]"
@@ -265,6 +326,62 @@ export default function QuestionComponent(data) {
 							</div>
 						</button>
 					</div>
+					{showCommentSection && (
+						<>
+							{loadingComments && <div>Loading</div>}
+							{!loadingComments && (
+								<div className="flex flex-col gap-1 mt-1">
+									<div className="flex gap-2 items-center">
+										<div className="h-8 w-8 relative">
+											<Image
+												src={userImg}
+												alt="Profile picture for you"
+												fill
+												className="rounded-full"
+												sizes="32px"
+											/>
+										</div>
+										<form
+											onSubmit={handleAddComment}
+											className="flex flex-col sm:flex-row gap-2 flex-grow sm:items-center"
+										>
+											{/* <div className=""> */}
+											<input
+												className="outline-none w-full px-4 py-2 rounded-full border  dark:border-[#393839] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] hover:border-[#2e69ff] dark:hover:border-[#2e69ff] flex-grow focus:shadow-[0_0_0_2px_rgb(40,45,65)]"
+												placeholder="Add a comment..."
+												value={comment}
+												onChange={(e) =>
+													setComment(e.target.value)
+												}
+											/>
+											{/* </div> */}
+											<button
+												type="submit"
+												className="hidden sm:block text-[13px] text-center flex-grow flex-shrink-0 sm:flex-grow-0 font-semibold px-3 py-2 rounded-full text-white bg-[#2e69ff] hover:bg-[#1a5aff] transition disabled:opacity-35 disabled:hover:bg-[#2e69ff]"
+												disabled={
+													comment.trim().length === 0
+												}
+											>
+												Add Comment
+											</button>
+										</form>
+									</div>
+									{comments.map((item) => {
+										return (
+											<Comment
+												key={item._id}
+												item={item}
+												isChild={false}
+												setLoadingComments={
+													setLoadingComments
+												}
+											/>
+										);
+									})}
+								</div>
+							)}
+						</>
+					)}
 				</div>
 			)}
 		</>

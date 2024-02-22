@@ -1,5 +1,3 @@
-import React from "react";
-import classes from "./login.module.css";
 import Policies from "./policies";
 import LoginForm from "./login-form";
 import Footer from "../footer/footer";

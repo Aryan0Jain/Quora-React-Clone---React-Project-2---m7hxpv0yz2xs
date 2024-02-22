@@ -10,6 +10,7 @@ import { RxCross2 } from "react-icons/rx";
 import { THEMES } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useDataContext } from "@/components/contexts/data-provider";
 
 export default function ProfileSideMenu({
 	closeSideBar,
@@ -23,6 +24,10 @@ export default function ProfileSideMenu({
 	const { theme, setTheme, systemTheme } = useTheme();
 	const curTheme = theme === "system" ? systemTheme : theme;
 	const [selectedCheckBox, setSelectedCheckBox] = useState(theme);
+	const { startGlobalLoader } = useDataContext();
+	function handleLinkclick() {
+		startGlobalLoader();
+	}
 	function openThemeModal() {
 		setShowThemeModal(true);
 	}
@@ -35,7 +40,6 @@ export default function ProfileSideMenu({
 	}
 	async function handleLogOut() {
 		const data = await signOut();
-		console.log(data);
 	}
 	return (
 		status === "authenticated" &&
@@ -59,7 +63,10 @@ export default function ProfileSideMenu({
 						</div>
 						<Link
 							href={`/profile/${user.id}`}
-							onClick={closeSideBar}
+							onClick={() => {
+								closeSideBar();
+								handleLinkclick();
+							}}
 						>
 							<div className="py-5 px-3 pl-6 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-4">
 								<Image
@@ -172,7 +179,10 @@ export default function ProfileSideMenu({
 								</Modal>
 							</div>
 							<button
-								onClick={handleLogOut}
+								onClick={() => {
+									handleLogOut();
+									handleLinkclick();
+								}}
 								className="flex justify-between items-center p-3 pl-6 w-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition"
 							>
 								Logout

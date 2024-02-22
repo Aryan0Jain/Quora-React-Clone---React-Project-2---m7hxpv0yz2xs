@@ -12,6 +12,8 @@ import FollowingSvg from "@/components/profile/following-svg";
 import noPosts from "@/assets/end-of-page.webp";
 import QuestionComponent from "@/components/home/hero-section/question-components/question-component";
 import Link from "next/link";
+import Advertisements from "@/components/home/advertisements/advertisements";
+import { useDataContext } from "@/components/contexts/data-provider";
 
 export default function Profile({ params }) {
 	const { data: session, status } = useSession();
@@ -20,6 +22,7 @@ export default function Profile({ params }) {
 	const [userData, setUserData] = useState({});
 	const [showMoreHighlights, setShowMoreHighlights] = useState(false);
 	const [posts, setPosts] = useState([]);
+	const { stopGlobalLoader } = useDataContext();
 	function closeMoreHighlights() {
 		setShowMoreHighlights(false);
 	}
@@ -67,6 +70,9 @@ export default function Profile({ params }) {
 		loadUser();
 	}
 	useEffect(() => {
+		stopGlobalLoader();
+	}, []);
+	useEffect(() => {
 		if (status === "authenticated" && loading === true) {
 			loadUser();
 			loadPosts();
@@ -74,7 +80,7 @@ export default function Profile({ params }) {
 	}, [status, loading]);
 
 	return (
-		<div className="pt-[88px] md:pt-14 h-screen w-full bg-white">
+		<div className="pt-[88px] md:pt-14 h-screen w-full bg-white dark:bg-[#181818]">
 			<div className="w-full md:w-9/12 mx-auto mt-5">
 				{status === "loading" && loading && <div>Loading</div>}
 				{status === "authenticated" && !loading && (
@@ -105,10 +111,10 @@ export default function Profile({ params }) {
 													onClick={
 														handleFollowButtons
 													}
-													className="px-3 py-2 flex gap-1 items-center rounded-full transition border-[#2e69ff] text-[#2e69ff] shadow-[rgb(46,105,255)_0px_0px_0px_1px_inset] hover:bg-[#ebf0ff] disabled:opacity-35 disabled:hover:bg-white"
+													className="px-3 py-2 flex gap-1 items-center rounded-full transition border-[#2e69ff] text-[#2e69ff] dark:text-[#4894FD] shadow-[rgb(46,105,255)_0px_0px_0px_1px_inset] hover:bg-[#ebf0ff] dark:hover:bg-[#282d41] disabled:opacity-35 disabled:hover:bg-white"
 												>
 													<div>
-														<FollowingSvg className="stroke-[#2e69ff] fill-[#2e69ff]" />
+														<FollowingSvg className="stroke-[#2e69ff] fill-[#2e69ff] dark:stroke-[#4894FD] dark:fill-[#4894FD]" />
 													</div>
 													<div>Following</div>
 												</button>
@@ -131,15 +137,15 @@ export default function Profile({ params }) {
 								</div>
 							</div>
 							<div className="flex flex-col gap-2 flex-grow">
-								<div className="border-b-2 pb-2 p-3 flex justify-between items-center">
-									<div className="font-medium text-[#282829]">
+								<div className="border-b-2 dark:border-[#393839] pb-2 p-3 flex justify-between items-center">
+									<div className="font-medium text-[#282829] dark:text-[#d5d6d6]">
 										Credentials & Highlights
 									</div>
 									<button
 										onClick={() =>
 											setShowMoreHighlights(true)
 										}
-										className="text-[13px] text-[#939598] hover:underline"
+										className="text-[13px] text-[#939598] dark:text-[#b1b3b6] hover:underline"
 									>
 										More
 									</button>
@@ -168,43 +174,65 @@ export default function Profile({ params }) {
 								/>
 							</div>
 						</div>
-						<div className="flex flex-col gap-3 mt-4 w-full md:w-[550px] mb-4">
-							<div className="text-xl font-semibold ml-3">
-								Posts
+						<div className="w-full mx-auto flex gap-8">
+							<div className="flex flex-col gap-3 mt-4 w-full md:w-[550px] mb-4">
+								<div className="text-xl font-semibold ml-3">
+									Posts
+								</div>
+								{posts.length > 0 &&
+									posts.map((data, i) => {
+										return (
+											<div
+												key={i}
+												className=" dark:border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.15)]"
+											>
+												<QuestionComponent {...data} />
+											</div>
+										);
+									})}
+								{!posts ||
+									(posts.length === 0 && (
+										<div className="flex flex-col items-center gap-3">
+											<div className="relative w-28 h-28">
+												<Image
+													src={noPosts}
+													alt="no posts found"
+													fill
+													sizes="112px"
+												/>
+											</div>
+											{_id === session.user.id && (
+												<>
+													<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
+														You haven't shared,
+														answered or posted
+														anything yet.
+													</div>
+													<Link
+														href={"/answer"}
+														className="px-3 py-2 rounded-full text-white bg-[#2e69ff] hover:bg-[#1a5aff] transition"
+													>
+														Answer questions
+													</Link>
+												</>
+											)}
+											{_id !== session.user.id && (
+												<div>
+													<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
+														<span className="capitalize">
+															{name}
+														</span>{" "}
+														hasn't shared, answered
+														or posted anything yet.
+													</div>
+												</div>
+											)}
+										</div>
+									))}
 							</div>
-							{posts.length > 0 &&
-								posts.map((data, i) => {
-									return (
-										<div
-											key={i}
-											className=" dark:border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.15)]"
-										>
-											<QuestionComponent {...data} />
-										</div>
-									);
-								})}
-							{!posts ||
-								(posts.length === 0 && (
-									<div className="flex flex-col items-center gap-3">
-										<div className="relative w-28 h-28">
-											<Image
-												src={noPosts}
-												alt="no posts found"
-												fill
-											/>
-										</div>
-										<div className="mx-4 text-center text-[#636466]">
-											You haven't shared, answered or
-											posted anything yet.
-										</div>
-										<Link
-											href={"/answer"}
-											className="px-3 py-2 rounded-full text-white bg-[#2e69ff] hover:bg-[#1a5aff] transition"
-										>
-											Answer questions
-										</Link>
-									</div>
-								))}
+							<div className="hidden lg:block pt-4 mt-9 sticky top-[60px]">
+								<Advertisements className="top-[72px]" />
+							</div>
 						</div>
 					</div>
 				)}

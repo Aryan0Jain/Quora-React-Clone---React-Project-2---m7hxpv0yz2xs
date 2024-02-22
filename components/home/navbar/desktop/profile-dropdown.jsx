@@ -11,6 +11,7 @@ import { THEMES } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import ClickAwayListener from "react-click-away-listener";
 import Link from "next/link";
+import { useDataContext } from "@/components/contexts/data-provider";
 export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	const { data: session, status } = useSession();
 	let user;
@@ -19,6 +20,10 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	const { theme, setTheme, systemTheme } = useTheme();
 	const curTheme = theme === "system" ? systemTheme : theme;
 	const [selectedCheckBox, setSelectedCheckBox] = useState(theme);
+	const { startGlobalLoader } = useDataContext();
+	function handleLinkClick() {
+		startGlobalLoader();
+	}
 	function openThemeModal() {
 		setShowThemeModal(true);
 	}
@@ -43,7 +48,13 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 			<ClickAwayListener onClickAway={closeMenu}>
 				<div className={menuClass}>
 					<div className="absolute rotate-45 border-t border-l dark:border-[#393839] w-3 h-3 bg-white dark:bg-[#262626] left-1/2 -translate-y-1/2 -translate-x-1 lg:translate-x-0"></div>
-					<Link href={`/profile/${user.id}`} onClick={closeMenu}>
+					<Link
+						href={`/profile/${user.id}`}
+						onClick={() => {
+							closeMenu();
+							handleLinkClick();
+						}}
+					>
 						<div className="py-5 px-3 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-2">
 							<Image
 								src={userImg}
@@ -143,7 +154,10 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 							</Modal>
 						</div>
 						<button
-							onClick={handleLogOut}
+							onClick={() => {
+								handleLinkClick();
+								handleLogOut();
+							}}
 							className="flex justify-between items-center p-3 w-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition"
 						>
 							Logout
