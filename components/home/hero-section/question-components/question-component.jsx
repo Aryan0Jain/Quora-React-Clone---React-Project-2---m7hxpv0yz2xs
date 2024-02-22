@@ -33,8 +33,8 @@ export default function QuestionComponent(data) {
 		commentCount,
 		content,
 		createdAt,
-		dislikeCount,
 		images,
+		dislikeCount,
 		likeCount,
 		title,
 		_id,
@@ -80,7 +80,10 @@ export default function QuestionComponent(data) {
 	}
 	async function reLoadPostData() {
 		const res = await getPostDetail(session.user.jwt, _id);
-		if (res.message === "success") setPostData(res.data);
+		if (res.message === "success")
+			setPostData((prev) => {
+				return { ...res.data, createdAt: prev.createdAt };
+			});
 	}
 	function closeDeletePostModal() {
 		setShowDeletePostConfirmationModal(false);

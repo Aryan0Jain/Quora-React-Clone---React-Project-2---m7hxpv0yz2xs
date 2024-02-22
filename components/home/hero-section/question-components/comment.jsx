@@ -70,12 +70,15 @@ export default function Comment({ item, isChild, setLoadingComments }) {
 						</div>
 						<div className="w-full h-4 rounded-full"></div>
 						<div className="w-9/12 h-4 rounded-full"></div>
-						
 					</div>
 				</div>
 			)}
 			{!loading && (
-				<div className="flex gap-2 py-1 items-center">
+				<div
+					className={
+						"flex gap-2 py-1 " + (isChild ? "items-center" : "")
+					}
+				>
 					<div
 						className={
 							"relative flex-shrink-0" +
