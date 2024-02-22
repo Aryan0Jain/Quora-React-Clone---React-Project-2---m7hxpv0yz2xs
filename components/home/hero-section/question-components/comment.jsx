@@ -53,7 +53,27 @@ export default function Comment({ item, isChild, setLoadingComments }) {
 	}, [loading]);
 	return (
 		<>
-			{loading && <div>Loading</div>}
+			{loading && (
+				<div className="flex gap-2 py-1 items-center animate-pulse">
+					<div
+						className={
+							"relative flex-shrink-0 rounded-full" +
+							(isChild ? " w-5 h-5" : " w-8 h-8")
+						}
+					></div>
+					<div className="flex flex-col flex-grow">
+						<div className="flex justify-between flex-grow relative">
+							<div className="flex gap-2">
+								<div className="w-24 h-4 rounded-full"></div>
+								<div className="w-14 h-3 rounded-full"></div>
+							</div>
+						</div>
+						<div className="w-full h-4 rounded-full"></div>
+						<div className="w-9/12 h-4 rounded-full"></div>
+						
+					</div>
+				</div>
+			)}
 			{!loading && (
 				<div className="flex gap-2 py-1 items-center">
 					<div

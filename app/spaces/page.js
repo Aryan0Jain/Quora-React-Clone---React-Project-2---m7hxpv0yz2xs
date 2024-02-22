@@ -55,8 +55,15 @@ export default function Spaces() {
 									return (
 										<div
 											key={i}
-											className="rounded-2xl w-44 h-56 animate-pulse bg-white dark:bg-[#262626]"
-										></div>
+											className="rounded-2xl w-44 h-56 animate-pulse bg-white dark:bg-[#262626] pt-6 flex flex-col gap-3 items-center"
+										>
+											<div className="w-8 h-8 rounded-lg bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-11/12 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-11/12 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-11/12 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-11/12 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-7/12 h-3 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+										</div>
 									);
 								})}
 							</div>
