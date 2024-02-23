@@ -6,13 +6,13 @@ export default function Login() {
 	return (
 		<div
 			className="w-screen h-screen bg-cover bg-center bg-no-repeat
-		flex justify-center items-center py-4 px-2"
+		flex flex-col justify-center items-center py-4 px-2"
 			style={{
 				backgroundImage: `url(${background.src})`,
 			}}
 		>
 			<div className="bg-white rounded max-w-[700px] flex flex-col items-center mx-3 dark:bg-[#262626]">
-				<div className="flex flex-col items-center mb-10 px-2 text-center">
+				<div className="flex flex-col items-center mb-5 sm:mb-10 px-2 text-center">
 					<svg
 						width="202px"
 						height="115px"
@@ -33,12 +33,13 @@ export default function Login() {
 						world
 					</div>
 				</div>
-				<div className="grid w-full md:grid-cols-2 border-b border-[#dee0e1] pb-4 dark:border-[#393839]">
+				<div className="grid w-full md:grid-cols-2 border-b border-[#dee0e1] pb-1 sm:pb-4 dark:border-[#393839]">
 					<Policies />
 					<LoginForm />
 				</div>
 				<Footer />
 			</div>
+			<div className="h-10"></div>
 		</div>
 	);
 }

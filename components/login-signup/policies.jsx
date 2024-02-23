@@ -10,7 +10,7 @@ export default function Policies() {
 		stopGlobalLoader();
 	}, []);
 	return (
-		<div className="w-full flex flex-col gap-7 sm:px-6 px-4 pb-4 border-r border-[#dee0e1] dark:border-[#393839]">
+		<div className="w-full flex flex-col gap-2 sm:gap-7 sm:px-6 px-4 pb-4 border-r border-[#dee0e1] dark:border-[#393839]">
 			<div className="text-[#939598] text-[12px] sm:text-[13px] text-center">
 				By continuing you indicate that you agree to Quora’s Terms of
 				Service and Privacy Policy.
