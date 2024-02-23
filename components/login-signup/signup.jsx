@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { RxCross2 } from "react-icons/rx";
-import { isValidEmail } from "@/lib/utils";
+import { isValidEmail, isValidPassord } from "@/lib/utils";
 import ErrorBox from "./error-box";
 // import { useTheme } from "next-themes";
 const input =
@@ -16,6 +16,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 	const [confirmPass, setConfirmPass] = useState("");
 	const [isValidName, setIsValidName] = useState(true);
 	const [hasErrorEmail, setHasErrorEmail] = useState(false);
+	const [hasErrorPassword, setHasErrorPassword] = useState(false);
 	const [passNotMatching, setPassNotMatching] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
@@ -66,6 +67,14 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 		};
 	}, [email]);
 	useEffect(() => {
+		const passTimeOut = setTimeout(() => {
+			if (pass !== "") setHasErrorPassword(!isValidPassord(pass));
+		}, 300);
+		return () => {
+			clearTimeout(passTimeOut);
+		};
+	}, [pass]);
+	useEffect(() => {
 		const passTimeout = setTimeout(() => {
 			if (pass !== "" && confirmPass !== "")
 				setPassNotMatching(pass !== confirmPass);
@@ -74,10 +83,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 			clearTimeout(passTimeout);
 		};
 	}, [pass, confirmPass]);
-	// function handleToggle() {
-	// 	if (theme === "dark") setTheme("light");
-	// 	else setTheme("dark");
-	// }
+
 	return (
 		ready &&
 		show &&
@@ -166,6 +172,16 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 									setErrorMessage("");
 								}}
 							/>
+							{pass !== "" && hasErrorPassword && (
+								<ErrorBox
+									message={
+										"Password must contain minimum of 8 characters with atleast one uppercase letter, one lowercase letter and one digit."
+									}
+								/>
+							)}
+							{errorMessage !== "" && (
+								<ErrorBox message={errorMessage} />
+							)}
 						</div>
 						<div className="flex flex-col">
 							<label
@@ -209,6 +225,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 								email !== "" &&
 								!hasErrorEmail &&
 								pass !== "" &&
+								!hasErrorPassword &&
 								confirmPass !== "" &&
 								!passNotMatching &&
 								errorMessage === "" &&

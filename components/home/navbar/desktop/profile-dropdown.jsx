@@ -12,6 +12,7 @@ import { useTheme } from "next-themes";
 import ClickAwayListener from "react-click-away-listener";
 import Link from "next/link";
 import { useDataContext } from "@/components/contexts/data-provider";
+import { toast } from "react-toastify";
 export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	const { data: session, status } = useSession();
 	let user;
@@ -36,7 +37,9 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	}
 	async function handleLogOut() {
 		const data = await signOut();
-		console.log(data);
+		closeMenu();
+		startGlobalLoader();
+		toast.success("Logged out successfully.");
 	}
 	const menuClass =
 		(showMenu
@@ -154,10 +157,7 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 							</Modal>
 						</div>
 						<button
-							onClick={() => {
-								handleLinkClick();
-								handleLogOut();
-							}}
+							onClick={handleLogOut}
 							className="flex justify-between items-center p-3 w-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition"
 						>
 							Logout

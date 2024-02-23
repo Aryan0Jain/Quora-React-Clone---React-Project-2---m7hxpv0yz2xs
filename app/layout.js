@@ -4,8 +4,9 @@ import Session from "@/components/contexts/session-provider";
 import { getServerSession } from "next-auth";
 import Navbar from "@/components/home/navbar/navbar";
 import DataContextProvider from "@/components/contexts/data-provider";
-import MessageBox from "@/components/message-box/message-box";
 import GlobalLoader from "@/components/common/global-loader";
+import "react-toastify/dist/ReactToastify.css";
+import MessageBox from "@/components/common/message-box";
 
 export const metadata = {
 	title: "Quora - A place to share knowledge and better understand the world",
@@ -22,10 +23,9 @@ export default async function RootLayout({ children }) {
 							{session && <Navbar />}
 							<div className="bg-[#F1F2F2] dark:bg-[#181818] flex justify-center">
 								{children}
-								<div id="portal">
-									<MessageBox />
-								</div>
+								<div id="portal"></div>
 							</div>
+							<MessageBox />
 							<GlobalLoader />
 						</NextThemeProvider>
 					</DataContextProvider>

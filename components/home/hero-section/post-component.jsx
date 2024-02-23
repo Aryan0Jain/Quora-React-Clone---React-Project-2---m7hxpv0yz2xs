@@ -2,11 +2,20 @@ import Image from "next/image";
 import React, { useState } from "react";
 import userImg from "@/assets/default_user.webp";
 import CreatePost from "../create-post";
+import { useDataContext } from "@/components/contexts/data-provider";
+import { useRouter } from "next/navigation";
 
 export default function PostComponent() {
 	const [isCreatePostVisible, setIsCreatePostVisible] = useState(false);
+	const { startGlobalLoader } = useDataContext();
+	const router = useRouter();
 	function showCreatePost() {
 		setIsCreatePostVisible(true);
+	}
+	function handleAnswerClick() {
+		// toast("Hi");
+		startGlobalLoader();
+		router.push("/answer");
 	}
 	return (
 		<div className="bg-[#FFF] dark:bg-[#262626] border border-[#dee0e1] dark:border-[#262626] rounded">
@@ -53,7 +62,10 @@ export default function PostComponent() {
 							></path>
 						</g>
 					</svg>
-					<div className="text-[13px] text-[#636466] font-medium dark:text-[#b1b3b6]">
+					<div
+						onClick={handleAnswerClick}
+						className="text-[13px] text-[#636466] font-medium dark:text-[#b1b3b6]"
+					>
 						Answer
 					</div>
 				</button>

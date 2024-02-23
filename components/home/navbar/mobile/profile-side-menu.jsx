@@ -11,6 +11,7 @@ import { THEMES } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useDataContext } from "@/components/contexts/data-provider";
+import { toast } from "react-toastify";
 
 export default function ProfileSideMenu({
 	closeSideBar,
@@ -40,6 +41,9 @@ export default function ProfileSideMenu({
 	}
 	async function handleLogOut() {
 		const data = await signOut();
+		startGlobalLoader();
+		closeSideBar();
+		toast.success("Logged out successfully.");
 	}
 	return (
 		status === "authenticated" &&
@@ -179,10 +183,7 @@ export default function ProfileSideMenu({
 								</Modal>
 							</div>
 							<button
-								onClick={() => {
-									handleLogOut();
-									handleLinkclick();
-								}}
+								onClick={handleLogOut}
 								className="flex justify-between items-center p-3 pl-6 w-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a] transition"
 							>
 								Logout

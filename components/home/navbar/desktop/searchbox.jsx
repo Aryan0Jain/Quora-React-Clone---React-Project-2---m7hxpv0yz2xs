@@ -89,7 +89,7 @@ export default function SearchBox() {
 	useEffect(() => {
 		const id = setTimeout(() => {
 			if (query !== "") getResults();
-		}, 120);
+		}, 150);
 		return () => {
 			clearTimeout(id);
 		};
@@ -130,7 +130,13 @@ export default function SearchBox() {
 									>
 										Search: <span>{query}</span>
 									</div>
-									{loading && <div>Loading...</div>}
+									{loading && (
+										<div className="my-2 mx-5 flex flex-col gap-[6px] items-center animate-pulse">
+											<div className="w-full h-[6px] rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-full h-[6px] rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+											<div className="w-full h-[6px] rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+										</div>
+									)}
 									{!loading &&
 										posts.length > 0 &&
 										posts.map((item) => {

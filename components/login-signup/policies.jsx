@@ -11,12 +11,12 @@ export default function Policies() {
 	}, []);
 	return (
 		<div className="w-full flex flex-col gap-7 sm:px-6 px-4 pb-4 border-r border-[#dee0e1] dark:border-[#393839]">
-			<div className="text-[#939598] text-[12px] sm:text-[13px]">
+			<div className="text-[#939598] text-[12px] sm:text-[13px] text-center">
 				By continuing you indicate that you agree to Quora’s Terms of
 				Service and Privacy Policy.
 			</div>
 			<div className="flex flex-col gap-2">
-				<div className="flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818]">
+				<div className="hidden sm:flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818]">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -49,7 +49,7 @@ export default function Policies() {
 						Continue with Google <span>(Coming Soon)</span>
 					</p>
 				</div>
-				<div className="flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818]">
+				<div className="hidden sm:flex gap-3 border p-2 items-center hover:bg-black/5 dark:border-[#393839] dark:bg-[#181818]">
 					<svg
 						width="24"
 						height="24"

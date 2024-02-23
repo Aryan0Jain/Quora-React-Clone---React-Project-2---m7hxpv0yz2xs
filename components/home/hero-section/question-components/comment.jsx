@@ -10,8 +10,14 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import ClickAwayListener from "react-click-away-listener";
 import Modal from "@/components/common/modal";
 import { useDataContext } from "@/components/contexts/data-provider";
+import { toast } from "react-toastify";
 
-export default function Comment({ item, isChild, setLoadingComments }) {
+export default function Comment({
+	item,
+	isChild,
+	setLoadingComments,
+	reloadPost,
+}) {
 	const [loading, setLoading] = useState(true);
 	const { data: session, status } = useSession();
 	const [user, setUser] = useState({});
@@ -40,10 +46,14 @@ export default function Comment({ item, isChild, setLoadingComments }) {
 	}
 	async function handleDelete() {
 		setShowDropDown(false);
+		closeDeleteModal();
 		const data = await deleteComment(session.user.jwt, item._id);
 		if (data.message === "success") {
 			setLoadingComments(true);
-			closeDeleteModal();
+			reloadPost();
+			toast.success("Comment Deleted");
+		} else {
+			toast.error("OOPS! Some error occured.");
 		}
 	}
 	useEffect(() => {
@@ -135,7 +145,7 @@ export default function Comment({ item, isChild, setLoadingComments }) {
 													onClick={() =>
 														setShowDeleteModal(true)
 													}
-													className="px-6 py-2 hover:bg-[#edeef0] dark:hover:bg-[#161515] transition rounded-md"
+													className="px-6 py-2 hover:bg-[#edeef0] dark:hover:bg-[#161515] transition rounded-md shadow-[0_0_10px_rgba(0,0,0,0.2)] dark:shadow-[0_0_10px_rgba(0,0,0,0.4)]"
 												>
 													Delete
 												</button>

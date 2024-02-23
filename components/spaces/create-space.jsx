@@ -8,13 +8,16 @@ import { createASpace } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useDataContext } from "../contexts/data-provider";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 export default function CreateSpace({ show, setShow }) {
 	const [files, setFiles] = useState([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const { data: session, status } = useSession();
-	const { setReloadPosts } = useDataContext();
+	const { startGlobalLoader } = useDataContext();
 	const imagesInput = useRef();
+	const router = useRouter();
 	function filesBtnHandler(e) {
 		setFiles([...e.target.files]);
 	}
@@ -42,9 +45,15 @@ export default function CreateSpace({ show, setShow }) {
 			setFiles([]);
 		}
 
-		const data = await createASpace(session.user.jwt, formData);
 		closeModal();
-		setReloadPosts(true);
+		const data = await createASpace(session.user.jwt, formData);
+		if (data?.status === "success") {
+			toast.success("Space created.");
+			startGlobalLoader();
+			router.push(`/spaces/${data.data._id}`);
+		} else {
+			toast.error("OOPS! Some error occured. Please try again later.");
+		}
 	}
 	return (
 		<Modal show={show} close={closeModal}>

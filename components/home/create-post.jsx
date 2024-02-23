@@ -8,6 +8,7 @@ import { createAPost } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useDataContext } from "../contexts/data-provider";
 import Image from "next/image";
+import { toast } from "react-toastify";
 export default function CreatePost({ show, setShow }) {
 	const [files, setFiles] = useState([]);
 	const [title, setTitle] = useState("");
@@ -44,7 +45,12 @@ export default function CreatePost({ show, setShow }) {
 
 		const data = await createAPost(session.user.jwt, formData);
 		closeModal();
-		setReloadPosts(true);
+		if (data.message === "success") {
+			setReloadPosts(true);
+			toast.success("Post created.");
+		} else {
+			toast.error("OOPS! Some error occurred.");
+		}
 	}
 	return (
 		<Modal show={show} close={closeModal}>

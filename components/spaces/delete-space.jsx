@@ -3,6 +3,8 @@ import Modal from "../common/modal";
 import { deleteASpace } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { useDataContext } from "../contexts/data-provider";
 
 export default function DeleteSpace({
 	showDeleteSpaceModal,
@@ -11,10 +13,16 @@ export default function DeleteSpace({
 }) {
 	const { data: session } = useSession();
 	const router = useRouter();
+	const { startGlobalLoader } = useDataContext();
 	async function handleDeleteSpace() {
+		closeDeleteSpaceModal();
 		const data = await deleteASpace(session.user.jwt, channelID);
 		if (data.message === "success") {
+			startGlobalLoader();
+			toast.success("Space deleted.");
 			router.push("/");
+		} else {
+			toast.error("OOPS! Some error occurred.");
 		}
 	}
 	return (

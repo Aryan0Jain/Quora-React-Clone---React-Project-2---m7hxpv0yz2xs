@@ -23,6 +23,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import Modal from "@/components/common/modal";
 import EditPost from "../../edit-post";
 import Comment from "./comment";
+import { toast } from "react-toastify";
 
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
@@ -72,11 +73,26 @@ export default function QuestionComponent(data) {
 	}
 	async function handleUpvoteButton() {
 		const data = await toggleUpVote(!isLiked, session.user.jwt, _id);
-		reLoadPostData();
+		if (data.message === "success") {
+			reLoadPostData();
+			toast.success(isLiked ? "Upvote removed!" : "Post upvoted!", {
+				autoClose: 3000,
+			});
+		} else {
+			toast.error("OOPS! some error occurred.", { autoClose: 3000 });
+		}
 	}
 	async function handleDownvoteButton() {
 		const data = await toggleDownVote(!isDisliked, session.user.jwt, _id);
-		reLoadPostData();
+		if (data.message === "success") {
+			reLoadPostData();
+			toast.success(
+				isDisliked ? "Downvote removed!" : "Post downvoted!",
+				{ autoClose: 3000 }
+			);
+		} else {
+			toast.error("OOPS! some error occurred.", { autoClose: 3000 });
+		}
 	}
 	async function reLoadPostData() {
 		const res = await getPostDetail(session.user.jwt, _id);
@@ -93,6 +109,9 @@ export default function QuestionComponent(data) {
 		const data = await deletePost(session.user.jwt, _id);
 		if (data.message === "success") {
 			setReloadPosts(true);
+			toast.success("Post Deleted");
+		} else {
+			toast.error("OOPS! Some error occured.");
 		}
 	}
 	async function fetchComments() {
@@ -113,6 +132,10 @@ export default function QuestionComponent(data) {
 			if (data.message === "success") {
 				setComment("");
 				setLoadingComments(true);
+				reLoadPostData();
+				toast.success("Comment added.");
+			} else {
+				toast.error("OOPS! Some error occurred.");
 			}
 		}
 	}
@@ -316,7 +339,10 @@ export default function QuestionComponent(data) {
 							</button>
 						</div>
 						<button
-							onClick={toggleComments}
+							onClick={() => {
+								toggleComments();
+								reLoadPostData();
+							}}
 							className="flex items-center gap-1 px-2 py-1 rounded-full hover:bg-[#00000008] dark:hover:bg-[#ffffff0a]"
 						>
 							<CommentIcon
@@ -401,6 +427,7 @@ export default function QuestionComponent(data) {
 												key={item._id}
 												item={item}
 												isChild={false}
+												reloadPost={reLoadPostData}
 												setLoadingComments={
 													setLoadingComments
 												}
