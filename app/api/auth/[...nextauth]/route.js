@@ -1,5 +1,8 @@
+/******************  
+	Here I am using nextAuth library for authorization.
+	It logs in user and stores the name, email, id and jwt in a cookie
+****************** */
 import { userLogin } from "@/lib/actions";
-import { projectID } from "@/lib/utils";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -8,6 +11,7 @@ const handler = NextAuth({
 		strategy: "jwt",
 		maxAge: 30 * 24 * 60 * 60,
 	},
+	// maxAge is the life of the cookie in seconds, here 30 days.
 	pages: { signIn: "/login", signOut: "/login" },
 	secret: process.env.NEXTAUTH_SECRET,
 	callbacks: {
@@ -20,15 +24,12 @@ const handler = NextAuth({
 			}
 			return token;
 		},
-		// async signIn({ user }) {
-		// 	if (user.status === "fail") return false;
-		// 	return true;
-		// },
 		async session({ session, token }) {
 			session.user = { ...token };
 			return session;
 		},
 	},
+	// as of now I have only one provider, Credentials.
 	providers: [
 		CredentialsProvider({
 			type: "credentials",
@@ -45,32 +46,6 @@ const handler = NextAuth({
 					return null;
 				}
 				return res;
-				// try {
-				// 	const data = await fetch(
-				// 		"https://academics.newtonschool.co/api/v1/user/login",
-				// 		{
-				// 			method: "POST",
-				// 			headers: {
-				// 				"Content-Type": "application/json",
-				// 				projectID: projectID,
-				// 			},
-				// 			body: JSON.stringify(body),
-				// 		}
-				// 	);
-				// 	const res = await data.json();
-				// 	if (
-				// 		res.message &&
-				// 		res.message === "Incorrect EmailId or Password"
-				// 	) {
-				// 		return null;
-				// 	}
-				// 	return res;
-				// } catch (error) {
-				// 	return null;
-				// 	return {
-				// 		mesaage: "Some Error Occured. Please try again later.",
-				// 	};
-				// }
 			},
 		}),
 	],

@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import userImg from "@/assets/default_user.webp";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
@@ -24,10 +24,16 @@ import Modal from "@/components/common/modal";
 import EditPost from "../../edit-post";
 import Comment from "./comment";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
 	// console.log(session, status);
+	const [parentComponentData, setParentComponentData] = useState({
+		postPage: data.postPage,
+		shouldReloadParent: data.shouldReloadParent,
+		reloadParent: data.reloadParent,
+	});
 	const [postData, setPostData] = useState(data);
 	const {
 		author,
@@ -46,8 +52,9 @@ export default function QuestionComponent(data) {
 	const date = new dayjs(createdAt);
 	const { name = "John Doe", profileImage, _id: aid } = author;
 	const [loading, setLoading] = useState(true);
-	const { setDisplayMessageBox, setReloadPosts, startGlobalLoader } =
-		useDataContext();
+	const commentInputRef = useRef();
+	const { setReloadPosts, startGlobalLoader } = useDataContext();
+	const router = useRouter();
 	const [
 		showDeletePostConfirmationModal,
 		setShowDeletePostConfirmationModal,
@@ -108,7 +115,14 @@ export default function QuestionComponent(data) {
 		closeDeletePostModal();
 		const data = await deletePost(session.user.jwt, _id);
 		if (data.message === "success") {
-			setReloadPosts(true);
+			if (parentComponentData.postPage) {
+				router.back();
+				startGlobalLoader();
+			} else if (parentComponentData.shouldReloadParent) {
+				parentComponentData.reloadParent();
+			} else {
+				setReloadPosts(true);
+			}
 			toast.success("Post Deleted");
 		} else {
 			toast.error("OOPS! Some error occured.");
@@ -122,6 +136,7 @@ export default function QuestionComponent(data) {
 		setLoadingComments(false);
 	}
 	async function handleAddComment(e) {
+		commentInputRef.current.blur();
 		e.preventDefault();
 		if (comment.trim().length > 0) {
 			const data = await postComment(
@@ -402,12 +417,13 @@ export default function QuestionComponent(data) {
 										>
 											{/* <div className=""> */}
 											<input
-												className="outline-none w-full px-4 py-2 rounded-full border  dark:border-[#393839] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] hover:border-[#2e69ff] dark:hover:border-[#2e69ff] flex-grow focus:shadow-[0_0_0_2px_rgb(40,45,65)]"
+												className="outline-none w-full px-4 py-2 rounded-full border-[1.5px] dark:border-[#393839] focus:border-[#2e69ff] dark:focus:border-[#2e69ff] hover:border-[#2e69ff] dark:hover:border-[#2e69ff] flex-grow focus:shadow-[0_0_2px_0px_rgb(40,45,65)] dark:focus:shadow-[0_0_20px_0px_rgb(40,45,65)]"
 												placeholder="Add a comment..."
 												value={comment}
 												onChange={(e) =>
 													setComment(e.target.value)
 												}
+												ref={commentInputRef}
 											/>
 											{/* </div> */}
 											<button

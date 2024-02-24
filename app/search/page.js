@@ -104,8 +104,6 @@ export default function Search({ searchParams }) {
 							<>
 								<div className="p-3 font-medium border-b dark:border-[#393839]">
 									Posts :
-									{/* for{" "}
-									<span className="font-bold">{query}</span> */}
 								</div>
 								{posts.map((item) => {
 									const {
@@ -177,8 +175,6 @@ export default function Search({ searchParams }) {
 							<>
 								<div className="p-3 font-medium border-b dark:border-[#393839]">
 									Users :
-									{/* for{" "}
-									<span className="font-bold">{query}</span> */}
 								</div>
 								{profiles.map((item) => {
 									const {

@@ -3,7 +3,7 @@ export default function Advertisements({ className }) {
 		<div
 			className={
 				className +
-				" sticky flex flex-col gap-4 w-[340px] pt-2 border bg-[#f7f7f8] dark:bg-[#202020] dark:border-[#262626]"
+				" sticky flex flex-col justify-end gap-4 w-[340px] h-[575px] pt-2 border bg-[#f7f7f8] dark:bg-[#202020] dark:border-[#262626]"
 			}
 		>
 			<iframe

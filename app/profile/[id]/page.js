@@ -14,6 +14,7 @@ import QuestionComponent from "@/components/home/hero-section/question-component
 import Link from "next/link";
 import Advertisements from "@/components/home/advertisements/advertisements";
 import { useDataContext } from "@/components/contexts/data-provider";
+import { notFound } from "next/navigation";
 
 export default function Profile({ params }) {
 	const { data: session, status } = useSession();
@@ -26,12 +27,19 @@ export default function Profile({ params }) {
 	function closeMoreHighlights() {
 		setShowMoreHighlights(false);
 	}
+	if (hasError) {
+		//redirect to not found page if user does not exist
+		return notFound();
+	}
 	async function loadUser() {
 		setHasError(false);
 		const data = await getUser(session.user.jwt, params.id);
 		if (data.status === "success") {
 			setUserData(data.data);
 			document.title = data.data.name;
+		} else {
+			setHasError(true);
+			return;
 		}
 		setLoading(false);
 	}
@@ -128,9 +136,7 @@ export default function Profile({ params }) {
 										);
 									})}
 								</div>
-								<div className="hidden lg:block pt-4 mt-9 sticky top-[60px] w-80 h-72 bg-slate-300 dark:bg-[#3f3f3f] rounded">
-									{/* <Advertisements className="top-[72px]" /> */}
-								</div>
+								<div className="hidden lg:block pt-4 mt-9 sticky top-[60px] w-80 h-72 bg-slate-300 dark:bg-[#3f3f3f] rounded"></div>
 							</div>
 						</div>
 					))}
@@ -143,6 +149,7 @@ export default function Profile({ params }) {
 										src={profileImage ?? userImg}
 										width={120}
 										height={120}
+										priority
 										className="object-cover rounded-full min-w-20"
 										alt={`Profile Image for ${name}`}
 									/>
@@ -234,10 +241,16 @@ export default function Profile({ params }) {
 									posts.map((data, i) => {
 										return (
 											<div
-												key={i}
+												key={data._id}
 												className=" dark:border-[#262626] shadow-[0_0_10px_rgba(0,0,0,0.15)]"
 											>
-												<QuestionComponent {...data} />
+												<QuestionComponent
+													{...data}
+													shouldReloadParent={true}
+													reloadParent={() =>
+														setLoading(true)
+													}
+												/>
 											</div>
 										);
 									})}

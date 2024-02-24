@@ -5,6 +5,7 @@ import React from "react";
 
 export default async function LoginComponent() {
 	const session = await getServerSession();
+	// If a logged in user tries to visit the login page he/she is redirected to home page.
 	if (session) {
 		redirect("/");
 	} else {

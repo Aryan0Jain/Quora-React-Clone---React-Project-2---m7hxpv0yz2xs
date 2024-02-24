@@ -13,5 +13,5 @@ body {
 	/* color: rgb(213, 214, 214);*/
 	direction: ltr;
 	color: #282829;
-	@apply dark:text-[rgb(213,214,214)];
+	@apply dark:text-[rgb(213,214,214)] scroll-smooth;
 }
