@@ -36,6 +36,8 @@ export default function Search({ searchParams }) {
 			search();
 		}
 	}, [loading, status]);
+
+	// Reload if query changes
 	useEffect(() => {
 		setLoading(true);
 	}, [searchParams]);

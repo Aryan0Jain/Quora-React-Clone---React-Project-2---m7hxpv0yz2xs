@@ -35,6 +35,7 @@ export default function EditPost({
 		setShow(false);
 	}
 	async function editPost() {
+		// Since we are posting images we need to post in formData
 		const formData = new FormData();
 		formData.append("title", title);
 		setTitle("");

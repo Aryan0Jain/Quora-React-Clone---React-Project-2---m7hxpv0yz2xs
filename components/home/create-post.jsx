@@ -31,6 +31,7 @@ export default function CreatePost({ show, setShow }) {
 		setFiles([]);
 	}
 	async function addPost() {
+		// Since we are posting images we need to post in formData
 		const formData = new FormData();
 		formData.append("title", title);
 		setTitle("");

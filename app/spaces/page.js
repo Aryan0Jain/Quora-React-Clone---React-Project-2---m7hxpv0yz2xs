@@ -10,7 +10,6 @@ import Link from "next/link";
 import CreateSpace from "@/components/spaces/create-space";
 import Advertisements from "@/components/home/advertisements/advertisements";
 import { useDataContext } from "@/components/contexts/data-provider";
-import { useRouter } from "next/navigation";
 
 export default function Spaces() {
 	const [loading, setLoading] = useState(true);

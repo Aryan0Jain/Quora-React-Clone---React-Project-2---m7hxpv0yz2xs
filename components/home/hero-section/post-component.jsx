@@ -13,7 +13,6 @@ export default function PostComponent() {
 		setIsCreatePostVisible(true);
 	}
 	function handleAnswerClick() {
-		// toast("Hi");
 		startGlobalLoader();
 		router.push("/answer");
 	}

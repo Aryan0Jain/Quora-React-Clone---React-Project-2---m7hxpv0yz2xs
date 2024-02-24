@@ -18,9 +18,11 @@ export default async function RootLayout({ children }) {
 		<html lang="en">
 			<body>
 				<Session>
+					{/* To provide access to useSession to child components */}
 					<DataContextProvider>
 						<NextThemeProvider>
 							{session && <Navbar />}
+							{/* To load Navbar only when user is logged in */}
 							<div className="bg-[#F1F2F2] dark:bg-[#181818] flex justify-center">
 								{children}
 								<div id="portal"></div>

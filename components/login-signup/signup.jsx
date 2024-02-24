@@ -5,7 +5,6 @@ import { createPortal } from "react-dom";
 import { RxCross2 } from "react-icons/rx";
 import { isValidEmail, isValidPassord } from "@/lib/utils";
 import ErrorBox from "./error-box";
-// import { useTheme } from "next-themes";
 const input =
 	"outline-none border-2 border-[#dee0e1] py-3 px-2 rounded hover:border-[rgba(45,105,255,0.6)] dark:hover:border-[rgba(45,105,255,0.4)] focus:border-[rgb(46,105,255)] dark:focus:border-[rgb(46,105,255)] focus:shadow-[rgb(235,240,255)0px0px0px2px] transition-colors placeholder:text-[10px] md:placeholder:text-[12px] dark:bg-[#181818] dark:border-[#393839]";
 export default function Signup({ show, setShow, setReadyToLogIn }) {
@@ -21,7 +20,6 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [signupFail, setSignupFail] = useState(false);
-	// const { theme, setTheme } = useTheme();
 	async function handleSignup(e) {
 		setLoading(true);
 		e.preventDefault();
@@ -97,7 +95,6 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 					>
 						<RxCross2 size={24} />
 					</button>
-					{/* <button onClick={handleToggle}>Toggle</button> */}
 					<form
 						className="px-6 pb-5 border-b dark:border-[#393839] flex flex-col gap-3"
 						onSubmit={handleSignup}
@@ -175,7 +172,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 							{pass !== "" && hasErrorPassword && (
 								<ErrorBox
 									message={
-										"Password must contain minimum of 8 characters with atleast one uppercase letter, one lowercase letter and one digit."
+										"Password must contain minimum of 8 characters with atleast one uppercase letter, one lowercase letter and one digit, and should NOT contain any special character."
 									}
 								/>
 							)}

@@ -20,7 +20,7 @@ export default function Page({ params }) {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const { data: session, status } = useSession();
-	const [coverIndex] = useState(Math.floor(Math.random() * 5));
+	const [coverIndex] = useState(Math.floor(Math.random() * 5)); // for the background cover
 	const [showEditBox, setShowEditBox] = useState(false);
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 	const { stopGlobalLoader, startGlobalLoader } = useDataContext();
@@ -139,11 +139,9 @@ export default function Page({ params }) {
 
 							<div className="px-5 flex flex-col gap-2 mt-12 md:mt-14">
 								<div className="flex w-full justify-between">
-									{/* <Link href={""} onClick={handleLinkClick}> */}
 									<div className="text-white font-bold text-[18px] md:text-[27px]">
 										{name}
 									</div>
-									{/* </Link> */}
 									{owner._id === session.user.id && (
 										<div className="flex gap-4">
 											<button onClick={openEditModal}>
