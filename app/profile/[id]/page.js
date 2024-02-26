@@ -15,6 +15,7 @@ import Link from "next/link";
 import Advertisements from "@/components/home/advertisements/advertisements";
 import { useDataContext } from "@/components/contexts/data-provider";
 import { notFound } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Profile({ params }) {
 	const { data: session, status } = useSession();
@@ -69,9 +70,15 @@ export default function Profile({ params }) {
 
 	async function handleFollowButtons() {
 		// setLoading(true);
-		try {
-			const data = await toggleFollow(!isFollowed, session.user.jwt, _id);
-		} catch (error) {}
+		const data = await toggleFollow(!isFollowed, session.user.jwt, _id);
+		if (data.message === "success") {
+			toast.success(
+				(!isFollowed ? `You are now following ` : `You unfollowed `) +
+					(name.slice(0, 1).toUpperCase() + name.slice(1))
+			);
+		} else {
+			toast.error("OOPS! Some error occurred.");
+		}
 		loadUser();
 	}
 	useEffect(() => {
@@ -232,7 +239,7 @@ export default function Profile({ params }) {
 								/>
 							</div>
 						</div>
-						<div className="w-full mx-auto flex gap-8">
+						<div className="w-full mx-auto flex gap-16 mb-4 justify-center">
 							<div className="flex flex-col gap-3 mt-4 w-full md:w-[550px] mb-4">
 								<div className="text-xl font-semibold ml-3">
 									Posts
