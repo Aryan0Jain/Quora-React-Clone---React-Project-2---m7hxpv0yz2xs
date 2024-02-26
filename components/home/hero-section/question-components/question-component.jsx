@@ -199,6 +199,7 @@ export default function QuestionComponent(data) {
 							width={36}
 							height={36}
 							alt={`profile picture for ${name}`}
+							loading="lazy"
 							className="rounded-full object-cover w-7 h-7 md:h-9 md:w-9"
 						/>
 						<div>
@@ -286,19 +287,20 @@ export default function QuestionComponent(data) {
 					<div className="relative max-w-[550px] bg-[#5f615f] dark:bg-[#5f615f]">
 						{images.map((src, i) => {
 							return (
-								<div className="relative max-h-[550px]" key={i}>
+								<div
+									className="relative aspect-[16/12] w-full"
+									key={i}
+								>
 									<Image
 										key={i}
 										src={src}
 										alt={title}
-										height={0}
-										width={0}
 										placeholder="blur"
 										blurDataURL={imgPlaceholder.src}
 										loading="lazy"
-										// fill
+										fill
 										sizes="500px"
-										className="object-contain z-0 w-full h-auto"
+										className="object-cover z-0 w-full h-auto"
 									/>
 								</div>
 							);
