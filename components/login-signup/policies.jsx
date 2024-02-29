@@ -73,7 +73,7 @@ export default function Policies() {
 					</p>
 				</div>
 				<button
-					className="hover:bg-black/5 font-medium text-[13px] py-2 rounded-full dark:hover:bg-[rgba(255,255,255,0.04)]"
+					className="text-[#fff] font-medium text-[13px] py-2 rounded-full bg-[#2e69ff] hover:bg-[rgb(26,90,255)] dark:hover:bg-[rgba(255,255,255,0.04)] transition"
 					onClick={() => setShowSignUp(true)}
 				>
 					Sign Up

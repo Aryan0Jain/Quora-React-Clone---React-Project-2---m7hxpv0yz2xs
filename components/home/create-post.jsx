@@ -9,13 +9,15 @@ import { useSession } from "next-auth/react";
 import { useDataContext } from "../contexts/data-provider";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 export default function CreatePost({ show, setShow }) {
 	const [files, setFiles] = useState([]);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const { data: session, status } = useSession();
-	const { setReloadPosts } = useDataContext();
+	const { setReloadPosts, startGlobalLoader } = useDataContext();
 	const imagesInput = useRef();
+	const router = useRouter();
 	function filesBtnHandler(e) {
 		setFiles([...e.target.files]);
 	}
@@ -47,8 +49,9 @@ export default function CreatePost({ show, setShow }) {
 		const data = await createAPost(session.user.jwt, formData);
 		closeModal();
 		if (data.message === "success") {
-			setReloadPosts(true);
 			toast.success("Post created.");
+			startGlobalLoader();
+			router.push(`/posts/${data.id}`);
 		} else {
 			toast.error("OOPS! Some error occurred.");
 		}

@@ -10,6 +10,7 @@ import QuestionComponent from "./question-components/question-component";
 import { useRouter } from "next/navigation";
 import usePageBottom from "@/components/custom-hooks/use-page-bottom";
 import { useDataContext } from "@/components/contexts/data-provider";
+import { IoMdArrowDropupCircle } from "react-icons/io";
 export default function HeroSection() {
 	const { data: session, status } = useSession();
 	const [loading, setLoading] = useState(true);
@@ -29,6 +30,10 @@ export default function HeroSection() {
 	}
 	function handleReload() {
 		router.refresh();
+	}
+	function handleGoToTop() {
+		// window.scroll({ top: 0, behavior: "smooth" });
+		window.scrollTo({ top: 0, behavior: "smooth" });
 	}
 	useEffect(() => {
 		if (reloadPosts && !loadMorePosts) {
@@ -121,7 +126,13 @@ export default function HeroSection() {
 				</div>
 			)}
 			{!hasMoreResults && !hasError && (
-				<div>You have reached the end</div>
+				<button
+					onClick={handleGoToTop}
+					className="self-center flex gap-3 mt-2 p-2 mb-2 items-center hover:bg-[#00000010] dark:hover:bg-[#ffffff10] transition duration-200 rounded"
+				>
+					<IoMdArrowDropupCircle size={22} />
+					<div>Go To Top</div>
+				</button>
 			)}
 		</div>
 	);

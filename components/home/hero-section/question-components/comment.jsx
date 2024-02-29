@@ -64,24 +64,45 @@ export default function Comment({
 	return (
 		<>
 			{loading && (
-				<div className="flex gap-2 py-1 items-center animate-pulse">
-					<div
-						className={
-							"relative flex-shrink-0 rounded-full" +
-							(isChild ? " w-5 h-5" : " w-8 h-8")
-						}
-					></div>
-					<div className="flex flex-col flex-grow">
-						<div className="flex justify-between flex-grow relative">
-							<div className="flex gap-2">
-								<div className="w-24 h-4 rounded-full"></div>
-								<div className="w-14 h-3 rounded-full"></div>
+				<>
+					{/* <div className="flex gap-2 py-1 items-center animate-pulse">
+						<div
+							className={
+								"relative flex-shrink-0 rounded-full" +
+								(isChild ? " w-5 h-5" : " w-8 h-8")
+							}
+						></div>
+						<div className="flex flex-col flex-grow">
+							<div className="flex justify-between flex-grow relative">
+								<div className="flex gap-2">
+									<div className="w-24 h-3 rounded-full"></div>
+									<div className="w-14 h-3 rounded-full"></div>
+								</div>
 							</div>
+							<div className="w-full h-3 rounded-full"></div>
+							<div className="w-9/12 h-3 rounded-full"></div>
 						</div>
-						<div className="w-full h-4 rounded-full"></div>
-						<div className="w-9/12 h-4 rounded-full"></div>
+					</div> */}
+					<div className="flex gap-2 my-1 px-2 animate-pulse">
+						<div
+							className={
+								"rounded-full bg-slate-300 dark:bg-[#1b1b1b]" +
+								(isChild ? " w-5 h-5" : " w-8 h-8")
+							}
+						></div>
+						{/* <div
+							className={
+								"relative flex-shrink-0 rounded-full" +
+								(isChild ? " w-5 h-5" : " w-8 h-8")
+							}
+						></div> */}
+						<div className="flex flex-col flex-grow gap-2">
+							<div className="w-8/12 h-2 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+							<div className="w-full h-2 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+							<div className="w-7/12 h-2 rounded-full bg-slate-300 dark:bg-[#1b1b1b]"></div>
+						</div>
 					</div>
-				</div>
+				</>
 			)}
 			{!loading && (
 				<div
@@ -96,7 +117,7 @@ export default function Comment({
 						}
 					>
 						<Image
-							src={user.profileImage ?? userImg}
+							src={user.profileImage || userImg}
 							alt={`Profile picture for ${user.name}`}
 							fill
 							sizes={"20px, 32px"}

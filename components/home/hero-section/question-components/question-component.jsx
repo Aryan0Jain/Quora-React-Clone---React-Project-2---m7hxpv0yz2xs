@@ -24,7 +24,7 @@ import Modal from "@/components/common/modal";
 import EditPost from "../../edit-post";
 import Comment from "./comment";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function QuestionComponent(data) {
 	const { data: session, status } = useSession();
@@ -64,6 +64,8 @@ export default function QuestionComponent(data) {
 	const [loadingComments, setLoadingComments] = useState(false);
 	const [comments, setComments] = useState([]);
 	const [comment, setComment] = useState("");
+	const pathName = usePathname();
+	const [commentIndex, setCommentIndex] = useState(5);
 	function openEditModal() {
 		setShowEditModal(true);
 	}
@@ -74,6 +76,16 @@ export default function QuestionComponent(data) {
 			setLoadingComments(true);
 			setShowCommentSection(true);
 		}
+		setCommentIndex(4);
+	}
+	function loadMoreComments() {
+		setCommentIndex((prev) => {
+			if (prev + 5 < comments.length) {
+				return prev + 5;
+			} else {
+				return comments.length;
+			}
+		});
 	}
 	function handleLinkClick() {
 		startGlobalLoader();
@@ -116,6 +128,7 @@ export default function QuestionComponent(data) {
 		const data = await deletePost(session.user.jwt, _id);
 		if (data.message === "success") {
 			if (parentComponentData.postPage) {
+				console.log(router);
 				router.back();
 				startGlobalLoader();
 			} else if (parentComponentData.shouldReloadParent) {
@@ -131,7 +144,7 @@ export default function QuestionComponent(data) {
 	async function fetchComments() {
 		const data = await getComments(session.user.jwt, _id);
 		if (data.message === "success") {
-			setComments(data.data);
+			setComments(data.data.reverse());
 		}
 		setLoadingComments(false);
 	}
@@ -208,14 +221,16 @@ export default function QuestionComponent(data) {
 									{name}
 								</span>
 								<span className="bg-[#636466] w-[2px] h-[2px] rounded-full"></span>
-								<Link
-									href={`/profile/${aid}`}
-									onClick={handleLinkClick}
-								>
-									<span className="text-[#2e69ff] hover:underline font-medium">
-										View Profile
-									</span>
-								</Link>
+								{!pathName.startsWith("/profile") && (
+									<Link
+										href={`/profile/${aid}`}
+										onClick={handleLinkClick}
+									>
+										<span className="text-[#2e69ff] hover:underline font-medium">
+											View Profile
+										</span>
+									</Link>
+								)}
 							</div>
 							{createdAt && (
 								<div className="text-[13px] text-[#636466] dark:text-[#b1b3b6]">
@@ -274,15 +289,24 @@ export default function QuestionComponent(data) {
 							</div>
 						)}
 					</div>
-					<Link
-						href={`/posts/${_id}`}
-						className="w-fit"
-						onClick={handleLinkClick}
-					>
-						<div className="text-base font-bold hover:underline underline-offset-1">
-							{title}
+					{pathName.startsWith("/posts") && (
+						<div className="w-fit">
+							<div className="text-base font-bold underline-offset-1">
+								{title}
+							</div>
 						</div>
-					</Link>
+					)}
+					{!pathName.startsWith("/posts") && (
+						<Link
+							href={`/posts/${_id}`}
+							className="w-fit"
+							onClick={handleLinkClick}
+						>
+							<div className="text-base font-bold hover:underline underline-offset-1">
+								{title}
+							</div>
+						</Link>
+					)}
 					<div className="text-[15px]">{content}</div>
 					<div className="relative max-w-[550px] bg-[#5f615f] dark:bg-[#5f615f]">
 						{images.map((src, i) => {
@@ -439,19 +463,29 @@ export default function QuestionComponent(data) {
 											</button>
 										</form>
 									</div>
-									{comments.map((item) => {
-										return (
-											<Comment
-												key={item._id}
-												item={item}
-												isChild={false}
-												reloadPost={reLoadPostData}
-												setLoadingComments={
-													setLoadingComments
-												}
-											/>
-										);
-									})}
+									{comments
+										.slice(0, commentIndex)
+										.map((item) => {
+											return (
+												<Comment
+													key={item._id}
+													item={item}
+													isChild={false}
+													reloadPost={reLoadPostData}
+													setLoadingComments={
+														setLoadingComments
+													}
+												/>
+											);
+										})}
+									{commentIndex < comments.length && (
+										<button
+											className="rounded-full py-[6px] text-[13px] border hover:bg-[#00000008] transition duration-200 dark:hover:bg-[#ffffff0a] dark:border-[#ffffff39]"
+											onClick={loadMoreComments}
+										>
+											Load More Comments
+										</button>
+									)}
 								</div>
 							)}
 						</>

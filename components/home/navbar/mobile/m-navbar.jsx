@@ -1,7 +1,5 @@
-import Link from "next/link";
 import React from "react";
 
-import QuoraIcon from "@/components/nav-icons/quora-icon";
 import Search from "./search";
 import AddPost from "./addpost";
 import MobileTabs from "./tabs";

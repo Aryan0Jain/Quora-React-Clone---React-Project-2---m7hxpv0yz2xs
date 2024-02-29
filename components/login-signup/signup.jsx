@@ -16,6 +16,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 	const [isValidName, setIsValidName] = useState(true);
 	const [hasErrorEmail, setHasErrorEmail] = useState(false);
 	const [hasErrorPassword, setHasErrorPassword] = useState(false);
+	const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
 	const [passNotMatching, setPassNotMatching] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
@@ -51,7 +52,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 	useEffect(() => {
 		const nameTimeout = setTimeout(() => {
 			if (name !== "") setIsValidName(name.length >= 3);
-		}, 300);
+		}, 1000);
 		return () => {
 			clearTimeout(nameTimeout);
 		};
@@ -59,15 +60,18 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 	useEffect(() => {
 		const emailTimeout = setTimeout(() => {
 			if (email !== "") setHasErrorEmail(!isValidEmail(email));
-		}, 300);
+		}, 1000);
 		return () => {
 			clearTimeout(emailTimeout);
 		};
 	}, [email]);
 	useEffect(() => {
 		const passTimeOut = setTimeout(() => {
-			if (pass !== "") setHasErrorPassword(!isValidPassord(pass));
-		}, 300);
+			if (pass !== "") {
+				setHasErrorPassword(isValidPassord(pass) !== "valid");
+				setPasswordErrorMsg(isValidPassord(pass));
+			}
+		}, 1000);
 		return () => {
 			clearTimeout(passTimeOut);
 		};
@@ -76,7 +80,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 		const passTimeout = setTimeout(() => {
 			if (pass !== "" && confirmPass !== "")
 				setPassNotMatching(pass !== confirmPass);
-		}, 300);
+		}, 1000);
 		return () => {
 			clearTimeout(passTimeout);
 		};
@@ -170,14 +174,7 @@ export default function Signup({ show, setShow, setReadyToLogIn }) {
 								}}
 							/>
 							{pass !== "" && hasErrorPassword && (
-								<ErrorBox
-									message={
-										"Password must contain minimum of 8 characters with atleast one uppercase letter, one lowercase letter and one digit, and should NOT contain any special character."
-									}
-								/>
-							)}
-							{errorMessage !== "" && (
-								<ErrorBox message={errorMessage} />
+								<ErrorBox message={passwordErrorMsg} />
 							)}
 						</div>
 						<div className="flex flex-col">

@@ -55,6 +55,7 @@ export default function SearchBoxMobile({ close }) {
 	}
 	function handleKeyDown(e) {
 		if (e.code === "Enter" && query !== "") {
+			setQuery("");
 			navigateToSearch(e);
 		}
 	}

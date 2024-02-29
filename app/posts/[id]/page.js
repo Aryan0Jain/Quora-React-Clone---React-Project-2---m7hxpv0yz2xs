@@ -73,7 +73,7 @@ export default function Post({ params }) {
 				)}
 				{!loading && status === "authenticated" && (
 					<div className="w-full mx-auto flex gap-16 mb-4 justify-center">
-						<div className="w-full md:max-w-[550px] border border-[#dee0e1] dark:border-[#262626]">
+						<div className="w-full md:max-w-[550px] border border-[#dee0e1] dark:border-[#262626] h-fit">
 							<QuestionComponent {...postData} postPage={true} />
 							{/* postPage tells the component it this component is being rendered in the particular post's page.
 							So that if the post is deleted the user is redirected to previous page */}
