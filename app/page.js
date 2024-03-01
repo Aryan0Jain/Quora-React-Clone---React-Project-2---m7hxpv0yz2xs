@@ -3,13 +3,12 @@ import { useDataContext } from "@/components/contexts/data-provider";
 import Advertisements from "@/components/home/advertisements/advertisements";
 import HeroSection from "@/components/home/hero-section/hero-section";
 import SpacesSidebar from "@/components/home/spaces-sidebar";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 export default function Home() {
-	const { data: session, status } = useSession();
 	const { stopGlobalLoader } = useDataContext();
 	useEffect(() => {
 		stopGlobalLoader();
+		// Stop the loader when the page has loaded completed.
 	}, []);
 	return (
 		<div className="min-h-screen w-full md:w-10/12 mx-auto pt-[88px] md:pt-14">
