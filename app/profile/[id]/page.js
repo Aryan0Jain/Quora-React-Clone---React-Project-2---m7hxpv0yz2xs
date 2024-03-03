@@ -23,7 +23,7 @@ export default function Profile({ params }) {
 	const [hasError, setHasError] = useState(false);
 	const [userData, setUserData] = useState({});
 	const [showMoreHighlights, setShowMoreHighlights] = useState(false);
-	const [posts, setPosts] = useState([]);
+	const [posts, setPosts] = useState();
 	const { stopGlobalLoader } = useDataContext();
 	function closeMoreHighlights() {
 		setShowMoreHighlights(false);
@@ -42,7 +42,6 @@ export default function Profile({ params }) {
 			setHasError(true);
 			return;
 		}
-		setLoading(false);
 	}
 	async function loadPosts() {
 		setHasError(false);
@@ -52,7 +51,6 @@ export default function Profile({ params }) {
 		} else {
 			setHasError(true);
 		}
-		setLoading(false);
 	}
 	const {
 		address,
@@ -85,10 +83,14 @@ export default function Profile({ params }) {
 		stopGlobalLoader();
 	}, []);
 	useEffect(() => {
-		if (status === "authenticated" && loading === true) {
-			loadUser();
-			loadPosts();
+		async function initialize() {
+			if (status === "authenticated" && loading === true) {
+				await loadUser();
+				await loadPosts();
+				setLoading(false);
+			}
 		}
+		initialize();
 	}, [status, loading]);
 
 	return (
@@ -244,7 +246,8 @@ export default function Profile({ params }) {
 								<div className="text-xl font-semibold ml-3">
 									Posts
 								</div>
-								{posts.length > 0 &&
+								{posts &&
+									posts.length > 0 &&
 									posts.map((data, i) => {
 										return (
 											<div
@@ -261,45 +264,43 @@ export default function Profile({ params }) {
 											</div>
 										);
 									})}
-								{!posts ||
-									(posts.length === 0 && (
-										<div className="flex flex-col items-center gap-3">
-											<div className="relative w-28 h-28">
-												<Image
-													src={noPosts}
-													alt="no posts found"
-													fill
-													sizes="112px"
-												/>
-											</div>
-											{_id === session.user.id && (
-												<>
-													<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
-														You haven't shared,
-														answered or posted
-														anything yet.
-													</div>
-													<Link
-														href={"/answer"}
-														className="px-3 py-2 rounded-full text-white bg-[#2e69ff] hover:bg-[#1a5aff] transition"
-													>
-														Answer questions
-													</Link>
-												</>
-											)}
-											{_id !== session.user.id && (
-												<div>
-													<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
-														<span className="capitalize">
-															{name}
-														</span>{" "}
-														hasn't shared, answered
-														or posted anything yet.
-													</div>
-												</div>
-											)}
+								{(!posts || posts.length === 0) && (
+									<div className="flex flex-col items-center gap-3">
+										<div className="relative w-28 h-28">
+											<Image
+												src={noPosts}
+												alt="no posts found"
+												fill
+												sizes="112px"
+											/>
 										</div>
-									))}
+										{_id === session.user.id && (
+											<>
+												<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
+													You haven't shared, answered
+													or posted anything yet.
+												</div>
+												<Link
+													href={"/answer"}
+													className="px-3 py-2 rounded-full text-white bg-[#2e69ff] hover:bg-[#1a5aff] transition"
+												>
+													Answer questions
+												</Link>
+											</>
+										)}
+										{_id !== session.user.id && (
+											<div>
+												<div className="mx-4 text-center text-[#636466] dark:text-[#B1B3B6]">
+													<span className="capitalize">
+														{name}
+													</span>{" "}
+													hasn't shared, answered or
+													posted anything yet.
+												</div>
+											</div>
+										)}
+									</div>
+								)}
 							</div>
 							<div className="hidden lg:block pt-4 mt-9 sticky top-[60px]">
 								<Advertisements className="top-[72px]" />
