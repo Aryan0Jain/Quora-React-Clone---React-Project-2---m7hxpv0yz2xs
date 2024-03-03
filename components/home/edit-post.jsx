@@ -8,6 +8,7 @@ import { editAPost } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useDataContext } from "../contexts/data-provider";
 import { toast } from "react-toastify";
+import { usePathname, useRouter } from "next/navigation";
 export default function EditPost({
 	show,
 	setShow,
@@ -15,14 +16,17 @@ export default function EditPost({
 	oldContent,
 	postID,
 	images,
+	isPostsPage,
+	reloadPage,
 }) {
 	const [files, setFiles] = useState([]);
 	const [title, setTitle] = useState(oldTitle);
 	const [description, setDescription] = useState(oldContent);
 	const { data: session, status } = useSession();
-	const { setReloadPosts } = useDataContext();
+	const { setReloadPosts, startGlobalLoader } = useDataContext();
 	const imagesInput = useRef();
-
+	const router = useRouter();
+	const pathName = usePathname();
 	function filesBtnHandler(e) {
 		setFiles([...e.target.files]);
 	}
@@ -53,8 +57,13 @@ export default function EditPost({
 		const data = await editAPost(session.user.jwt, formData, postID);
 		closeModal();
 		if (data.message === "success") {
-			setReloadPosts(true);
 			toast.success("Post edited.");
+			if (isPostsPage) {
+				reloadPage();
+			} else {
+				startGlobalLoader();
+				router.push(`/posts/${data.id}`);
+			}
 		} else {
 			toast.error("OOPS! Some error occurred.");
 		}

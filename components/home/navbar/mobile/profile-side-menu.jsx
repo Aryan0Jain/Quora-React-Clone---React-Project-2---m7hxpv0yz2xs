@@ -12,6 +12,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useDataContext } from "@/components/contexts/data-provider";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 export default function ProfileSideMenu({
 	closeSideBar,
@@ -25,6 +26,7 @@ export default function ProfileSideMenu({
 	const { theme, setTheme, systemTheme } = useTheme();
 	const curTheme = theme === "system" ? systemTheme : theme;
 	const [selectedCheckBox, setSelectedCheckBox] = useState(theme);
+	const pathName = usePathname();
 	const { startGlobalLoader } = useDataContext();
 	function handleLinkclick() {
 		startGlobalLoader();
@@ -69,7 +71,10 @@ export default function ProfileSideMenu({
 							href={`/profile/${user.id}`}
 							onClick={() => {
 								closeSideBar();
-								handleLinkclick();
+								if (!pathName.startsWith("/profile"))
+									handleLinkclick();
+								else {
+								}
 							}}
 						>
 							<div className="py-5 px-3 pl-6 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-4">

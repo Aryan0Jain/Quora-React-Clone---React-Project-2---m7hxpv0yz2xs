@@ -173,6 +173,15 @@ export default function QuestionComponent(data) {
 		}
 	}, [status]);
 	useEffect(() => {
+		async function reload() {
+			if (loading) {
+				await reLoadPostData();
+				setLoading(false);
+			}
+		}
+		reload();
+	}, [loading]);
+	useEffect(() => {
 		if (loadingComments) {
 			fetchComments();
 		}
@@ -252,6 +261,8 @@ export default function QuestionComponent(data) {
 									oldContent={content}
 									postID={_id}
 									images={images}
+									isPostsPage={true}
+									reloadPage={() => setLoading(true)}
 								/>
 								<button
 									onClick={() =>

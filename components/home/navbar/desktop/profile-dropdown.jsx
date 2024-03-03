@@ -13,6 +13,7 @@ import ClickAwayListener from "react-click-away-listener";
 import Link from "next/link";
 import { useDataContext } from "@/components/contexts/data-provider";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	const { data: session, status } = useSession();
 	let user;
@@ -21,6 +22,7 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 	const { theme, setTheme, systemTheme } = useTheme();
 	const curTheme = theme === "system" ? systemTheme : theme;
 	const [selectedCheckBox, setSelectedCheckBox] = useState(theme);
+	const pathName = usePathname();
 	const { startGlobalLoader } = useDataContext();
 	function handleLinkClick() {
 		startGlobalLoader();
@@ -55,7 +57,11 @@ export default function ProfileDropDown({ showMenu, toggleMenu, closeMenu }) {
 						href={`/profile/${user.id}`}
 						onClick={() => {
 							closeMenu();
-							handleLinkClick();
+							if (!pathName.startsWith("/profile"))
+								handleLinkClick();
+							else {
+								closeMenu();
+							}
 						}}
 					>
 						<div className="py-5 px-3 border-b dark:border-[#393839] hover:bg-white/5 hover:opacity-70 flex flex-col gap-2">
