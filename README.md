@@ -1,34 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Quora Clone - React/Next.js Project
 
-## Getting Started
+Welcome to the Quora Clone project! This project aims to replicate the functionality of the popular social media platform Quora. Users can perform various actions such as login/signup, create, edit, and delete posts, upvote or downvote posts, add comments, create and manage spaces, view profiles, and visit spaces. The website also offers light theme, dark theme, and system theme options, and it's fully responsive.
 
-First, run the development server:
+## Hosted Link
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+You can access the project via the following link: [Quora Clone](https://quora-clone-aryan.netlify.app/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## GitHub Repository
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+You can find the source code for this project on GitHub: [Quora Clone GitHub Repository](https://github.com/Aryan0Jain/Quora-React-Clone---React-Project-2---m7hxpv0yz2xs)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tech Stack
 
-## Learn More
+-   HTML
+-   CSS
+-   JavaScript
+-   ReactJS
+-   Next.js
+-   NEXT-AUTH
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   **User Authentication:** Users can sign up for an account or log in with existing credentials.
+-   **Post Management:** Create, edit, and delete posts.
+-   **Voting System:** Users can upvote or downvote their own and other users' posts.
+-   **Comments:** Users can add comments to posts.
+-   **Space Creation:** Create, edit, and delete spaces.
+-   **Profile Viewing:** View own profile and other users' profiles.
+-   **Space Exploration:** Visit and interact with spaces.
+-   **Theme Options:** Light theme, dark theme, and system theme options available.
+-   **Responsive Design:** The website is fully responsive across different devices.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Installation
 
-## Deploy on Vercel
+To run this project locally, follow these steps:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone the repository:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### got clone git@github.com:Aryan0Jain/Quora-React-Clone---React-Project-2---m7hxpv0yz2xs.git
+
+2. Navigate into the project directory:
+
+### cd Quora-React-Clone---React-Project-2---m7hxpv0yz2xs
+
+3. Install dependencies:
+
+### npm install
+
+4. Start the development server:
+
+### npm run dev
+
+5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to view the application.
